@@ -3,6 +3,7 @@ package code.controller;
 import code.dao.CourseDao;
 import code.dao.InstructorDao;
 import code.entity.Course;
+import code.entity.CourseForm;
 import code.entity.Instructor;
 import com.mysql.cj.PreparedQuery;
 import lombok.RequiredArgsConstructor;
@@ -25,13 +26,28 @@ public class CourseController {
     private final CourseDao courseDao;
     private final InstructorDao instructorDao;
 
-    @GetMapping("/courseRegister")
+   /* @GetMapping("/courseRegister")
     public ModelAndView register(){
         return new ModelAndView("course/course_reg","course",new Course());
+    }*/
+
+    @GetMapping("/courseRegister")
+    public ModelAndView register(){
+        return new ModelAndView("course/course_reg","courseForm",new CourseForm());
+    }
+    @PostMapping("/addCourse")
+    public String addCourse(@ModelAttribute("courseForm")CourseForm courseForm, HttpServletRequest request){
+
+        Course course = courseForm.getCourse();
+        String instructor_name = courseForm.getInstructor();
+        Instructor instructor = instructorDao.findByName(instructor_name);
+        course.setInstructor(instructor);
+        courseDao.createCourse(course);
+        return "redirect:courseRegister";
     }
 
-    
-    @PostMapping("/addCourse")
+
+  /*  @PostMapping("/addCourse")
     public String addCourse(@ModelAttribute("course")Course course, HttpServletRequest request){
         System.out.println("Hello from addCourse!");
         String instructor_name = request.getParameter("instructor");
@@ -40,7 +56,7 @@ public class CourseController {
         Course course1 = courseDao.createCourse(course);
         System.out.println(course1.getName());
         return "redirect:courseRegister";
-    }
+    }*/
     @GetMapping("/courseDetails")
     public String courseDetails(Model model){
         List<Course> courses = courseDao.findAllCourse();

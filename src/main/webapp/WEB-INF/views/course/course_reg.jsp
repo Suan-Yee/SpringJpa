@@ -4,31 +4,31 @@
     <%@include file="../layouts/sidenav.jsp" %>
     <div class="main_contents">
         <div id="sub_content">
-            <form:form method="post" modelAttribute="course" action="addCourse" id="courseForm" >
+            <form:form method="post" modelAttribute="courseForm" action="addCourse" id="courseForm" >
 
                 <h2 class="col-md-6 offset-md-2 mb-5 mt-4">Course Registration</h2>
 
                 <div class="row mb-4">
                     <div class="col-md-2"></div>
-                    <form:label for="name" path="name" class="col-md-2 col-form-label">Name</form:label>
+                    <form:label for="name" path="course.name" class="col-md-2 col-form-label">Name</form:label>
                     <div class="col-md-4">
-                        <form:input type="text" class="form-control" path="name" id="name" placeholder="Enter Course Name"></form:input>
+                        <form:input type="text" class="form-control" path="course.name" id="name" placeholder="Enter Course Name"></form:input>
                     </div>
                 </div>
 
                 <div class="row mb-4">
                     <div class="col-md-2"></div>
-                    <form:label for="description" path="description" class="col-md-2 col-form-label">Description</form:label>
+                    <form:label for="description" path="course.description" class="col-md-2 col-form-label">Description</form:label>
                     <div class="col-md-4">
-                        <form:textarea type="text" class="form-control" path="description" id="description" placeholder="Description"></form:textarea>
+                        <form:textarea type="text" class="form-control" path="course.description" id="description" placeholder="Description"></form:textarea>
                     </div>
                 </div>
 
                 <div class="row mb-4">
                     <div class="col-md-2"></div>
-                    <label for="instructor"  class="col-md-2 col-form-label">Instructor</label>
+                    <form:label for="instructor" path="instructor"  class="col-md-2 col-form-label">Instructor</form:label>
                     <div class="col-md-4">
-                        <input type="text" class="form-control" name="instructor" id="instructor" placeholder="Instructor">
+                        <form:input type="text" class="form-control" path="instructor" id="instructor" placeholder="Instructor"></form:input>
                     </div>
                 </div>
 

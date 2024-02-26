@@ -10,7 +10,7 @@
         <% Student student  = (Student) request.getAttribute("student"); %>
 
         <%List<Course> courses = (List<Course>) request.getAttribute("courses"); %>
-        <% ArrayList<String> n_course = (ArrayList<String>) request.getAttribute("course_name"); %>
+        <% ArrayList<String> n_course = (ArrayList<String>) request.getAttribute("c_name"); %>
 
     <div class="main_contents">
         <div id="sub_content">
@@ -86,26 +86,22 @@
                     </select>
                 </div>
 
+                <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
                 <fieldset class="row mb-5">
                     <div class="col-md-2"></div>
                     <legend class="col-form-label col-md-2 pt-0">Attend</legend>
                     <div class="col-md-5">
-                        <% System.out.println("From jsp " + n_course);%>
-                        <% System.out.println("From jsp course " + courses); %>
-                        <%
-                            for (Course course : courses) {
-                        %>
-                        <div class="form-check-inline col-md-2">
-                            <input class="form-check-input" type="checkbox" name="course"
-                                   id="gridRadios" value="<%=course.getName()%>"
-                                   <% if (n_course != null && n_course.contains(course.getName())) { %>checked<% } %>>
-                            <label class="form-check-label" for="gridRadios">
-                                <%=course.getName()%>
-                            </label>
-                        </div>
-                        <%
-                            }
-                        %>
+                        <c:forEach var="course" items="${courses}">
+                            <div class="form-check-inline col-md-2">
+                                <input class="form-check-input" type="checkbox" name="course"
+                                       id="gridRadios${course.id}" value="${course.name}"
+                                       <c:if test="${c_name.contains(course.name)}">checked</c:if>>
+                                <label class="form-check-label" for="gridRadios${course.id}">
+                                        ${course.name}
+                                </label>
+                                </div>
+                        </c:forEach>
                     </div>
                 </fieldset>
 

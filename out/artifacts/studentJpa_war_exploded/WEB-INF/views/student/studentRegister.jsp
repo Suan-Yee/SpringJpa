@@ -65,8 +65,8 @@
                     <legend class="col-form-label col-md-2 pt-0">Attend</legend>
 
                     <div class="col-md-5">
-                        <div class="form-check-inline col-md-4">
-                            <div class="col-md-2"></div>
+                        <div class="form-check-inline col-md-5">
+                            <div class="col-md-4"></div>
                             <form:checkboxes items="${courses}" path="courses" itemValue="id" itemLabel="name"/>
                         </div>
                     </div>

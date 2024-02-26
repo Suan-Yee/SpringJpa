@@ -11,6 +11,7 @@ import java.util.Set;
 @AllArgsConstructor @NoArgsConstructor
 @SuperBuilder
 @Entity
+@ToString
 public class Student {
 
     @Id

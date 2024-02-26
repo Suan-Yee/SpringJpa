@@ -148,6 +148,8 @@ public class CourseDaoImpl implements CourseDao {
         try{
             em = JPAUtil.getEntityManagerFactory().createEntityManager();
             TypedQuery<Course> query = em.createQuery("SELECT c FROM Course c where c.id = :id OR c.name = :name",Course.class);
+            query.setParameter("id",courseId);
+            query.setParameter("name",name);
             courses = query.getResultList();
         }finally {
             if(em != null && em.isOpen()){

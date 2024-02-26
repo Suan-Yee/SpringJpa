@@ -12,5 +12,5 @@ import lombok.Setter;
 public class CourseForm {
 
     private Course course;
-    private Instructor instructor;
+    private String instructor;
 }

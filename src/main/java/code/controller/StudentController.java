@@ -4,6 +4,7 @@ import code.dao.CourseDao;
 import code.dao.EnrollDao;
 import code.dao.StudentDao;
 import code.entity.Course;
+import code.entity.Enroll;
 import code.entity.RegisterForm;
 import code.entity.Student;
 import lombok.RequiredArgsConstructor;
@@ -66,13 +67,13 @@ public class StudentController {
         return "student/student_details";
     }
     @GetMapping("/addStudent")
-    public String showData(Model model){
+    public String showData(Model model) {
 
-        List<Student> allStudents  = studentDao.findAllStudent();
-        model.addAttribute("students",allStudents);
+        List<Student> allStudents = studentDao.findAllStudent();
+        model.addAttribute("students", allStudents);
 
         return "student/student_details";
-    }
+        }
     @GetMapping("/updateStudent")
     public ModelAndView studentUpdate(@RequestParam("studentId") Long studentId) {
 
@@ -178,6 +179,18 @@ public class StudentController {
 
         return "student/student_details";
     }
-
+    @GetMapping("studentDetails")
+    public String displayView(@RequestParam(name = "studentId",required = false) Long id,Model model){
+        Student student = studentDao.findById(id);
+        List<Long> course_id = enrollDao.findCourseByStudentId(id);
+        List<String> courses = new ArrayList<>();
+        for(Long course : course_id){
+            Course result = courseDao.findById(course);
+            courses.add(result.getName());
+        }
+        model.addAttribute("student",student);
+        model.addAttribute("course",courses);
+        return "student/details";
+    }
 
 }
