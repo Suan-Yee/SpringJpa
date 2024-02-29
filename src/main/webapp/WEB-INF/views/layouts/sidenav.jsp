@@ -13,6 +13,9 @@
     <a href="courseDetails">Course Details </a>
   </div>
 
+
+  <a href="instructorReg">Instructor Registration </a>
+
   <a href="addUser">Users Management</a>
 
 

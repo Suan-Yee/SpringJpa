@@ -1,28 +1,31 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@include file="../layouts/header.jsp" %>
+<jsp:include page="../layouts/header.jsp"/>
 
 <!-- <div id="testsidebar">Hello World </div> -->
 <div class="container">
-    <%@include file="../layouts/sidenav.jsp" %>
+    <jsp:include page="../layouts/sidenav.jsp"/>
     <div class="main_contents">
         <div id="sub_content">
-            <form:form method="post" modelAttribute="register" action="addStudent" id="af-form">
+            <form:form method="post" modelAttribute="register" action="addStudent" id="form-ad">
                 <h2 class="col-md-6 offset-md-2 mb-5 mt-4">Student Registration</h2>
-
                 <div class="row mb-4">
                     <div class="col-md-2"></div>
-                    <form:label for="name" path="student.name"  class="col-md-2 col-form-label">Name</form:label>
-                    <div class="col-md-5">
+                    <form:label for="username" path="student.name"  class="col-md-2 col-form-label">Name</form:label>
+                    <div class="col-md-5" class="input-control">
                         <form:input type="text" path="student.name" class="form-control"
-                                    placeholder="Please Enter your name"></form:input>
+                                    placeholder="Please Enter your name" id="username"></form:input>
+                        <div class="error" >
+
+                        </div>
                     </div>
                 </div>
                 <div class="row mb-4">
                     <div class="col-md-2"></div>
                     <form:label for="dob" path="student.dob" class="col-md-2 col-form-label">DOB</form:label>
-                    <div class="col-md-5">
+                    <div class="col-md-5" class="input-control">
                         <form:input type="date" path="student.dob"  name="dob" class="form-control" id="dob"
                                     placeholder="YYYY-MM-DD"></form:input>
+                        <div class="error"></div>
                     </div>
                 </div>
 
@@ -30,10 +33,11 @@
                     <div class="col-md-2"></div>
                     <legend class="col-form-label col-md-2 pt-0">Gender</legend>
                     <div class="col-md-5">
-                        <div class="form-check-inline">
-                            <form:label path="student.gender">Gender</form:label></td> <td>
-                                <form:radiobutton path="student.gender" value="MALE" label="Male" />
-                                <form:radiobutton path="student.gender" value="FEMALE" label="Female" />
+                        <div class="form-check-inline" class="input-control">
+                            <form:label for="gender" path="student.gender">Gender</form:label></td> <td>
+                                <form:radiobutton id="gender" path="student.gender" value="MALE" label="Male" />
+                                <form:radiobutton id="gender" path="student.gender" value="FEMALE" label="Female" />
+                                    <div class="error"></div>
                         </div>
                     </div>
                 </fieldset>
@@ -42,22 +46,23 @@
                     <div class="col-md-2"></div>
 
                     <form:label path="student.phone" for="phone" class="col-md-2 col-form-label">Phone</form:label>
-                    <div class="col-md-5">
-                        <div id="error" style="color: red;"></div>
+                    <div class="col-md-5" class="input-control">
                         <form:input path="student.phone" type="text"  class="form-control" id="phone"
                                     placeholder="Please enter your phone number" maxlength="11"></form:input>
+                        <div class="error"></div>
                     </div>
                 </div>
 
                 <div class="row mb-4">
                     <div class="col-md-2"></div>
                     <form:label path="student.education" for="education" class="col-form-label">Education</form:label>
-                    <div class="col-md-5">
+                    <div class="col-md-5" class="input-control">
                         <form:select path="student.education" class="form-select" aria-label="Education" id="education">
-                            <form:option value="Bachelor of Information Technology">Bachelor of Information Technology</form:option>
-                            <form:option value="Diploma in IT">Diploma in IT</form:option>
-                            <form:option value="Bachelor of Computer Science">Bachelor of Computer Science</form:option>
+                            <form:option id="education" value="Bachelor of Information Technology">Bachelor of Information Technology</form:option>
+                            <form:option id="education" value="Diploma in IT">Diploma in IT</form:option>
+                            <form:option id="education" value="Bachelor of Computer Science">Bachelor of Computer Science</form:option>
                         </form:select>
+                        <div class="error"></div>
                     </div>
                 </div>
                 <fieldset class="row mb-5">
@@ -66,8 +71,9 @@
 
                     <div class="col-md-5">
                         <div class="form-check-inline col-md-5">
-                            <div class="col-md-4"></div>
+                            <div class="col-md-4" class="input-control"></div>
                             <form:checkboxes items="${courses}" path="courses" itemValue="id" itemLabel="name"/>
+                            <div class="error"></div>
                         </div>
                     </div>
                 </fieldset>
@@ -87,65 +93,91 @@
                     <div class="col-md-4">
                         <button type="button" class="btn btn-danger ">Reset</button>
                         <button type="submit" class="btn btn-secondary col-md-2"
-                                data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                >
                             Add</button>
                     </div>
                 </div>
             </form:form>
         </div>
     </div>
-    <%--<script>
-document.addEventListener('DOMContentLoaded', function(){
-    let form = document.getElementById("af-form");
-    let errorMessaage = document.getElementById("alert-Message");
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.getElementById('form-ad');
+                const username = document.getElementById('username');
+                const phone = document.getElementById('phone');
+                const dob = document.getElementById('dob');
 
-    form.addEventListener('submit', function(event){
-        if(!validateForm()){
-            event.preventDefault();
-        }
-    });
+                // form.addEventListener('submit', e => {
+                //     e.preventDefault();
+                //     const isValid = validateInputs();
+                //     if (isValid) {
+                //         console.log('Validation passed');
+                //         form.submit();
+                //     }
+                // });
 
-    function validateForm(){
-        let name = document.getElementById("name").value.trim();
-        let gender = document.querySelector("input[name='gender']:checked");
-        let phone = document.getElementById("phone").value;
-        let education  = document.getElementById("education").value;
-        let dob = document.getElementById("dob").value;
-        let attend = document.querySelectorAll("input[name='attend']:checked");
+                form.addEventListener('submit', function (event) {
+                    if (!validateInputs()) {
+                        event.preventDefault();
+                    }
+                });
 
-        if(name === '' || gender === null || phone === '' || education === '' || dob === '' || attend.length === 0 ){
-            errorMessaage.innerHTML = "Please fill in all required fields";
-            return false;
-        } else {
-            errorMessaage.innerHTML = "";
-            return true;
-        }
-    }
-});
+                const setError = (element, message) => {
+                    const inputControl = element.parentElement;
+                    const errorDisplay = inputControl.querySelector('.error');
 
-function validatePhone(input){
+                    errorDisplay.innerText = message;
+                    inputControl.classList.add('error');
+                    inputControl.classList.remove('success');
+                    errorDisplay.classList.add('alert', 'alert-danger');
+                    errorDisplay.classList.add('show');
+                };
 
-    input.value = input.value.replace(/[^0-9]/g, '');
-    if(input.value.length < 7){
-        document.getElementById("error").innerText = "Phone number should be at least 7 digits";
-        return false;
-    }else{
-        document.getElementById("error").innerText ="";
-        return true;
-    }
+                const setSuccess = element => {
+                    const inputControl = element.parentElement;
+                    const errorDisplay = inputControl.querySelector('.error');
 
+                    errorDisplay.innerText = '';
+                    inputControl.classList.add('success');
+                    inputControl.classList.remove('error');
+                    errorDisplay.classList.remove('show');
+                    errorDisplay.classList.remove('alert', 'alert-danger');
+                };
 
-}
-function showModal() {
+                const validateInputs = () => {
+                    const usernameValue = username.value.trim();
+                    const phoneValue = phone.value.trim();
+                    const dobValue = new Date(dob.value);
+                    const genderValue = document.querySelectorAll('input[name="student.gender"]:checked').length > 0 ? document.querySelectorAll('input[name="student.gender"]:checked')[0].value : '';
 
-    let id = document.getElementById("exampleModal");
-    modal.style.display = 'none';
+                    if (usernameValue === '') {
+                        setError(username, 'Username is required');
+                    } else {
+                        setSuccess(username);
+                    }
 
-}
+                    if (phoneValue === '') {
+                        setError(phone, 'Phone is required');
+                    } else if (!/^\d{11}$/.test(phoneValue)) {
+                        setError(phone, 'Phone must be 11 digits long');
+                    } else {
+                        setSuccess(phone);
+                    }
+                    if (!genderValue) {
+                        setError(document.querySelector('input[name="student.gender"]'), 'Gender is required');
+                    } else {
+                        setSuccess(document.querySelector('input[name="student.gender"]'));
+                    }
 
+                    const now = new Date();
+                    if (dobValue > now) {
+                        setError(dob, 'Date of birth cannot be in the future');
+                    } else {
+                        setSuccess(dob);
+                    }
+                    return !document.querySelectorAll('.error.show').length;
+                }
+            });
+        </script>
 
-</script>--%>
-
-</div>
-
-<%@include file="../layouts/footer.jsp" %>
+<jsp:include page="../layouts/footer.jsp"/>

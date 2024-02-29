@@ -2,7 +2,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%User log_user = (User) request.getSession().getAttribute("valid_user");%>
 <%@ include file="../layouts/header.jsp" %>
-
 <div class="container">
     <div class="main_contents">
         <div id="sub_content">
@@ -73,6 +72,7 @@
         </div>
     </dialog>
 </div>
+
 <script>
 
     if ('${error}' !== null && '${error}' !== '') {

@@ -1,6 +1,8 @@
 package code.controller;
 
+import code.dao.EmailService;
 import code.dao.UserDao;
+import code.entity.OTP;
 import code.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -20,11 +22,35 @@ import javax.servlet.http.HttpSession;
 public class LoginController {
 
     private final UserDao userDao;
+    private final EmailService emailService;
 
     @GetMapping("/")
     public ModelAndView loginUser(){
         return new ModelAndView("user/login","bean",new User());
     }
+   /* @GetMapping("/otp")
+    public ModelAndView enterOtp(){
+        return new ModelAndView("user/confirmOTP","otp",new OTP());
+    }
+    @PostMapping("/confirm")
+    public String confirmOTP(@ModelAttribute("otp") OTP otp ,HttpServletRequest request){
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            User user = (User) session.getAttribute("valid_user");
+            OTP userOTP = userDao.findByUserId(user.getId());
+            String code  = userOTP.getOtpCode();
+            System.out.println("input " + otp.getOtpCode());
+            System.out.println("COde" + code);
+                if (otp.getOtpCode().equals(code)) {
+                    userDao.deleteOtp(user.getId());
+                    return "redirect:/welcome";
+                }
+        }
+        if (session != null) {
+            session.invalidate();
+        }
+        return "redirect:/";
+    }*/
     @PostMapping("/login")
     public String login(@ModelAttribute("bean") @Validated User user, ModelMap model, HttpSession session){
 
@@ -40,8 +66,10 @@ public class LoginController {
             return "user/login";
         }else{
             session.setAttribute("valid_user",loginUser);
+            /*userDao.deleteOtp(loginUser.getId());
+            userDao.generateOtp(loginUser);*/
         }
-        return "redirect:welcome";
+        return "redirect:/welcome";
     }
     @GetMapping("/logout")
     public String logout(HttpServletRequest request){

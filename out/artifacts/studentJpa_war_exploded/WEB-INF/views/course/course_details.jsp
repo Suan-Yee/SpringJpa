@@ -44,6 +44,7 @@
                     <th scope="col">Instructor</th>
                   <%--  <% if(!log_user.getRole().equalsIgnoreCase("user")){ %>--%>
                     <th scope="col">Status</th>
+                    <th scope="col">Delete</th>
                    <%-- <% } %>--%>
                 </tr>
                 </thead>
@@ -60,27 +61,25 @@
                     <td><%=String.format("CUR%03d",course.getId())%></td>
                     <td><%= course.getName() %></td>
                     <td><%= course.getDescription()%></td>
-                    <td><%= course.getInstructor()%></td>
-                   <%-- <% if(!log_user.getRole().equalsIgnoreCase("user")){ %>--%>
+                    <td>
+                    <%if(course.getInstructor() != null){ %>
+                    <%= course.getInstructor().getName()%>
+                    <% } %></td>
                     <td>
                         <a href="courseStatus?courseId=<%=course.getId()%>">
-                            <% String str = (String) request.getAttribute("status"); %>
-                            <span class="<% if (course.getStatus().equalsIgnoreCase("pending")) { %>badge text-bg-warning<% } else { %>badge text-bg-info<% } %>">
-                                <% if (str != null) { %>
-                                <%= str %>
-                                <% } else { %>
-                                <%= course.getStatus() %>
-                                <% } %>
-                            </span>
+                         <span class="<% if (course.getStatus() != null && course.getStatus().equalsIgnoreCase("pending")) { %>badge text-bg-warning<% } else { %>badge text-bg-info<% } %>">
+                          <%= course.getStatus() != null ? course.getStatus() : "N/A" %>
+                        </span>
                         </a>
                     </td>
-                    <% } %>
-                    <%--   <td><a href="updateUser?userId=<%=course.getId()%>">
-                           <button type="button" class="btn btn-success mb-3 me-3">Update</button>
-                       </a></td>--%>
+                    <td>
+                        <a href="courseDelete?courseId=<%=course.getId()%>">
+                            <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </td>
                 </tr>
                 <%
-                        /*}*/
+                        }
                     }
                 %>
                 </tbody>

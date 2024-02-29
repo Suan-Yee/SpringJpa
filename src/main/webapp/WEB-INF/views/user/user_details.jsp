@@ -55,6 +55,11 @@
                         for (User user_list : users) {
                 %>
                 <tr>
+                    <% String error = (String) request.getAttribute("errors");%>
+                    <% if(error != null ) { %>
+                    <td><%=error%></td>
+                    <%}%>
+
                     <td>
                         <% if (user_list.getEmail().equalsIgnoreCase(log_user.getEmail())) { %>
                         <i class="fa-solid fa-user"></i>
@@ -67,37 +72,38 @@
                         <%= user_list.getUsername() %>
                     </td>
 
-                    <%--<td><%= user_list.getUserRoles() %></td>
+                    <td><%= user_list.getRole().getName() %></td>
                     <td><a href="updateUser?userId=<%=user_list.getId()%>">
                         <button type="button" class="btn btn-success mb-3 me-3"
-                                <% if (log_user.getUserRoles().equalsIgnoreCase("ADMIN")) {
-                                    if (user_list.getRole().equalsIgnoreCase("ADMIN") && !log_user.getEmail().equals(user_list.getEmail())) { %>
+                                <% if (log_user.getRole().getName().equalsIgnoreCase("ADMIN")) {
+                                    if (user_list.getRole().getName().equalsIgnoreCase("ADMIN") && !log_user.getEmail().equals(user_list.getEmail())) { %>
                                 disabled
                                 <% }
-                                } else if (log_user.getUserRoles().equalsIgnoreCase("USER")) {
-                                    if (!log_user.getEmail().equalsIgnoreCase(user_list.getEmail()) && (user_list.getRole().equalsIgnoreCase("ADMIN") || user_list.getRole().equalsIgnoreCase("USER"))) { %>
+                                } else if (log_user.getRole().getName().equalsIgnoreCase("USER")) {
+                                    if (!log_user.getEmail().equalsIgnoreCase(user_list.getEmail()) && (user_list.getRole().getName().equalsIgnoreCase("ADMIN") || user_list.getRole().getName().equalsIgnoreCase("USER"))) { %>
                                 disabled
                                 <% }
                                 } %>>
                             Update
                         </button>
                     </a></td>
-                    <td>--%>
-                        <%--<a href="deleteUser?userId=<%=user_list.getId()%>">--%>
-                        <%--<button type="button" class="btn btn-danger mb-3"
+                    <td>
+                        <a href="deleteUser?userId=<%=user_list.getId()%>">
+                        <button type="button" class="btn btn-danger mb-3"
                                 data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="setUserId(<%=user_list.getId()%>)"
-                                <% if (log_user.getRole().equalsIgnoreCase("ADMIN")) {
-                                    if (user_list.getRole().equalsIgnoreCase("ADMIN") && !log_user.getEmail().equals(user_list.getEmail())) { %>
+                                <% if (log_user.getRole().getName().equalsIgnoreCase("ADMIN")) {
+                                    if (user_list.getRole().getName().equalsIgnoreCase("ADMIN") && !log_user.getEmail().equals(user_list.getEmail())) { %>
                                 disabled
                                 <% }
-                                } else if (log_user.getRole().equalsIgnoreCase("USER")) {
-                                    if (!log_user.getEmail().equalsIgnoreCase(user_list.getEmail()) && (user_list.getRole().equalsIgnoreCase("ADMIN") || user_list.getRole().equalsIgnoreCase("USER"))) { %>
+                                } else if (log_user.getRole().getName().equalsIgnoreCase("USER")) {
+                                    if (!log_user.getEmail().equalsIgnoreCase(user_list.getEmail()) && (user_list.getRole().getName().equalsIgnoreCase("ADMIN") || user_list.getRole().getName().equalsIgnoreCase("USER"))) { %>
                                 disabled
                                 <% }
                                 } %>>
                             DELETE
-                        </button>--%>
+                        </button></a>
                     </td>
+
                 </tr>
                 <%
                         }

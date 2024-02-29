@@ -19,7 +19,8 @@ public class Role {
     private Long id;
     private String name;
 
-    @OneToMany(mappedBy = "role")
-    private Set<UserRole> userRoles = new HashSet<>();
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }

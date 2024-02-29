@@ -1,6 +1,7 @@
 package code.controller;
 
 import code.dao.UserDao;
+import code.entity.Student;
 import code.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -51,10 +53,18 @@ public class UserController {
             model.addAttribute("error","Password does not match");
             return "user/user_reg";
         }
-        userDao.createUser(user);
-        List<User> users  = userDao.findAll();
-        model.addAttribute("users",users);
-        return "user/user_details";
+        HttpSession session = request.getSession(false);
+        User log_user = (User) session.getAttribute("valid_user");
+
+        if(log_user != null) {
+            userDao.createUser(user);
+            List<User> users = userDao.findAll();
+            model.addAttribute("users", users);
+            return "user/user_details";
+        }else{
+            userDao.createUser(user);
+            return "redirect:/";
+        }
 
     }
     @GetMapping("/updateUser")
@@ -99,9 +109,19 @@ public class UserController {
                              @RequestParam(name = "name", required = false) String userName,
                              Model model) {
 
-        List<User> searchResults = userDao.findByIdOrUserName(userId, userName);
-        model.addAttribute("users", searchResults);
+        if(userId != null || (userName != null && !userName.isEmpty())){
+
+            List<User> searchResults = userDao.findByIdOrUserName(userId, userName);
+            if(searchResults == null){
+                model.addAttribute("errors","There is no user found");
+            }
+            model.addAttribute("users", searchResults);
+        }else{
+            List<User> users = userDao.findAll();
+            model.addAttribute("users", users);
+        }
 
         return "user/user_details";
+
     }
 }

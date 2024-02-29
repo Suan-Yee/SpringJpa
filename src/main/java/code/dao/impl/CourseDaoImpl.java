@@ -5,8 +5,10 @@ import code.entity.Course;
 import code.utils.JPAUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
@@ -71,11 +73,40 @@ public class CourseDaoImpl implements CourseDao {
             Course course = em.find(Course.class,courseId);
             if (course != null) {
                 em.remove(course);
+                em.getTransaction().commit();
                 return true;
             }else{
                 em.getTransaction().rollback();
                 return false;
             }
+        }finally {
+            if(em != null && em.isOpen()){
+                em.close();
+            }
+        }
+    }
+
+    @Override
+    public boolean enableCourse(Long courseId) {
+        EntityManager em = null;
+        try{
+            em = JPAUtil.getEntityManagerFactory().createEntityManager();
+            em.getTransaction().begin();
+            Course course = em.find(Course.class,courseId);
+
+            if(course != null){
+                course.setEnabled(false);
+                course.setStatus("delete");
+                em.merge(course);
+                em.getTransaction().commit();
+                return true;
+            }
+            return false;
+        }catch (RuntimeException e) {
+            if (em != null && em.isOpen()) {
+                em.getTransaction().rollback();
+            }
+            throw e;
         }finally {
             if(em != null && em.isOpen()){
                 em.close();
@@ -110,7 +141,7 @@ public class CourseDaoImpl implements CourseDao {
     }
 
     @Override
-    public List<Course> selectByStatus() {
+    public List<Course>  selectByStatus() {
         EntityManager em = null;
         List<Course> courses;
         try{
@@ -132,7 +163,7 @@ public class CourseDaoImpl implements CourseDao {
         List<Course> courses;
         try{
             em = JPAUtil.getEntityManagerFactory().createEntityManager();
-            courses = em.createQuery("SELECT c FROM Course c").getResultList();
+            courses = em.createQuery("SELECT c FROM Course c WHERE c.enabled = true ").getResultList();
         }finally {
             if(em != null && em.isOpen()){
                 em.close();

@@ -99,8 +99,6 @@ public class StudentDaoImpl implements StudentDao {
                 em.getTransaction().rollback();
                 return null;
             }
-
-
         }finally {
             if(em != null && em.isOpen()){
                 em.close();

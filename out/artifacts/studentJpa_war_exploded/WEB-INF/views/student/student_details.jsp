@@ -1,9 +1,7 @@
-<%@ page import="java.util.List" %>
-<%@ page import="code.entity.*" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@include file="../layouts/header.jsp" %>
+<%@ include file="../layouts/header.jsp" %>
 
 <div class="container">
     <%@include file="../layouts/sidenav.jsp" %>
@@ -49,9 +47,12 @@
                     </tr>
                     </thead>
                     <tbody>
+
                     <c:if test="${not empty students}">
                         <c:forEach items="${students}" var="student" varStatus="loopStatus">
                             <tr>
+                                <c:if test="${not empty error}"><td>${error}</td></c:if>
+
                                 <td>${loopStatus.index + 1}</td>
                                 <fmt:formatNumber type="number" pattern="000"
                                                   value="${student.id}" var="formattedId" />
@@ -91,6 +92,7 @@
                                         <i class="fa-solid fa-bars" style="font-size: 24px; color: black;"></i>
                                     </a>
                                 </td>
+
                             </tr>
                         </c:forEach>
                     </c:if>

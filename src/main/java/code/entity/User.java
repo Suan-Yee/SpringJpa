@@ -24,9 +24,11 @@ public class User {
     private String email;
     private String password;
 
-    @OneToMany(mappedBy = "user")
-    private Set<UserRole> userRoles = new HashSet<>();
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Role role;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private OTP otp;
 
     private boolean enabled;
     private boolean isNotLocked;

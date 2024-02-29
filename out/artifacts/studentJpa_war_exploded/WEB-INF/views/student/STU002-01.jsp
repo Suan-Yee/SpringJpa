@@ -1,21 +1,14 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page import="code.entity.Student" %>
-<%@ page import="code.entity.Course" %>
-<%@ page import="java.util.List" %>
 <%@include file="../layouts/header.jsp" %>
-<!-- <div id="testsidebar">Hello World </div> -->
 <div class="container">
+
     <%@include file="../layouts/sidenav.jsp" %>
         <% Student student  = (Student) request.getAttribute("student"); %>
 
-        <%List<Course> courses = (List<Course>) request.getAttribute("courses"); %>
-        <% ArrayList<String> n_course = (ArrayList<String>) request.getAttribute("c_name"); %>
-
     <div class="main_contents">
         <div id="sub_content">
-            <%--@elvariable id="register" type=""--%>
-            <form:form method="post" action="updateStudentAction" modelAttribute="register">
+            <form:form method="post" action="updateStudentAction" modelAttribute="register" id="form-ad">
 
             <h2 class="col-md-6 offset-md-2 mb-5 mt-4">Student Update</h2>
             <div class="row mb-4">
@@ -33,10 +26,12 @@
             <div class="row mb-4">
                 <div class="col-md-2"></div>
                 <form:label path="student.name" for="name" class="col-md-2 col-form-label">Name</form:label>
-                <div class="col-md-5">
-                    <form:input path="student.name" type="text" class="form-control"  id="names"
+                <div class="col-md-5" class="input-control">
+                    <form:input path="student.name" type="text" class="form-control"  id="name"
                                 value="<%=student.getName()%>"></form:input>
+                    <div class="error"></div>
                 </div>
+
             </div>
             <div class="row mb-4">
                 <div class="col-md-2"></div>
@@ -109,10 +104,11 @@
                     <div class="col-md-2"></div>
 
                     <form:label path="student.phone" for="phone" class="col-md-2 col-form-label">Phone</form:label>
-                    <div class="col-md-5">
+                    <div class="col-md-5" class="input-control">
                         <div id="error" style="color: red;"></div>
                         <form:input path="student.phone" type="text"  class="form-control" id="phone"
-                                    placeholder="Please enter your phone number" value="<%=student.getPhone()%>" maxlength="11"></form:input>
+                                    placldehoer="Please enter your phone number" value="<%=student.getPhone()%>" maxlength="11"></form:input>
+                        <div class="error"></div>
                     </div>
                 </div>
 
@@ -120,8 +116,7 @@
                     <div class="col-md-4"></div>
 
                     <div class="col-md-4">
-                        <button type="submit" class="btn btn-success"
-                                data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <button type="submit" id="submit-btn" class="btn btn-success">
                             Update</button>
 
                         <button type="button" class="btn btn-danger  "
@@ -139,4 +134,59 @@
             </div>
         </div>
     </div>
+        <script>
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.getElementById('form-ad');
+                const username = document.getElementById('name');
+                const phone = document.getElementById('phone');
+
+                form.addEventListener('submit', function(event){
+                    if(!validateInputs()){
+                        event.preventDefault();
+                    }
+                });
+
+                const setError = function (element, message) {
+                    const inputControl = element.parentElement;
+                    const errorDisplay = inputControl.querySelector('.error');
+
+                    errorDisplay.innerText = message;
+                    inputControl.classList.add('error');
+                    errorDisplay.classList.add('alert', 'alert-danger');
+                    errorDisplay.classList.add('show');
+                };
+
+                const setSuccess = function (element) {
+                    const inputControl = element.parentElement;
+                    const errorDisplay = inputControl.querySelector('.error');
+
+                    errorDisplay.innerText = '';
+                    inputControl.classList.remove('error');
+                    errorDisplay.classList.remove('alert', 'alert-danger');
+                    errorDisplay.classList.remove('show');
+                };
+
+                const validateInputs = function () {
+                    const usernameValue = username.value.trim();
+                    const phoneValue = phone.value.trim();
+
+                    if (usernameValue === '') {
+                        setError(username, 'Username is required');
+                    } else {
+                        setSuccess(username);
+                    }
+
+                    if (phoneValue === '') {
+                        setError(phone, 'Phone is required');
+                    } else if (!/^\d{11}$/.test(phoneValue)) {
+                        setError(phone, 'Phone must be 11 digits long');
+                    } else {
+                        setSuccess(phone);
+                    }
+
+                    return !document.querySelectorAll('.error.show').length;
+                };
+            });
+        </script>
 <%@include file="../layouts/footer.jsp" %>

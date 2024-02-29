@@ -10,6 +10,7 @@ public interface CourseDao {
      Course findById(Long courseId);
      Course findByName(String name);
      boolean deleteCourse(Long courseId);
+     boolean enableCourse(Long courseId);
      Course updateCourse(Course course);
      List<Course> selectByStatus();
      List<Course> findAllCourse();

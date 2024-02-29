@@ -60,6 +60,7 @@ public class CourseController {
     @GetMapping("/courseDetails")
     public String courseDetails(Model model){
         List<Course> courses = courseDao.findAllCourse();
+        System.out.println(courses);
         model.addAttribute("courses",courses);
 
         return "course/course_details";
@@ -74,6 +75,15 @@ public class CourseController {
 
         return "course/course_details";
     }
+
+    @GetMapping("/courseDelete")
+    public String courseDelete(@RequestParam(name = "courseId",required = false) Long courseId){
+
+             courseDao.enableCourse(courseId);
+        System.out.println("Course delete" );
+        return "redirect:/courseDetails";
+    }
+
     @GetMapping("/courseStatus")
     public String courseStatus(@RequestParam(name = "courseId",required = false)Long courseId, Model model, RedirectAttributes redirectAttributes){
         Course course = courseDao.findById(courseId);

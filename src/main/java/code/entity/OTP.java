@@ -4,27 +4,24 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.util.Date;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@SuperBuilder
+@Getter @Setter
+@AllArgsConstructor @NoArgsConstructor
 @Entity
-public class UserRole {
+public class OTP {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    private String otpCode;
+
+    @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
+    private Date expirationDate;
 }

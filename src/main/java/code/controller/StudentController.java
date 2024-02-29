@@ -165,9 +165,15 @@ public class StudentController {
 
         if (studentId != null) {
             Student student = studentDao.findById(studentId);
+            if(student == null){
+                model.addAttribute("error","There is no student found");
+            }
             model.addAttribute("students", Collections.singletonList(student));
         } else if (studentName != null && !studentName.isEmpty()) {
             List<Student> students = studentDao.findByName(studentName);
+            if(students == null){
+                model.addAttribute("error","There is no student found");
+            }
             model.addAttribute("students", students);
         } /*lse if (studentCourse != null && !studentCourse.isEmpty()) {
             List<Student> students = studentDao.findByCourse(studentCourse);
