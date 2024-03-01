@@ -208,7 +208,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void generateOtp(User user) {
+    public String generateOtp(User user) {
         EntityManager em = null;
         try{
             em = JPAUtil.getEntityManagerFactory().createEntityManager();
@@ -221,6 +221,7 @@ public class UserDaoImpl implements UserDao {
             otp.setExpirationDate(calendar.getTime());
             em.persist(otp);
             em.getTransaction().commit();
+            return otp.getOtpCode();
         }finally {
             if(em != null && em.isOpen()){
                 em.close();

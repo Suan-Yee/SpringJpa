@@ -13,14 +13,14 @@ public class EmailServiceImpl implements EmailService {
     private final JavaMailSender javaMailSender;
 
     @Override
-    public void sendEmail(String to) {
+    public void sendEmail(String to,String code) {
 
         try{
             SimpleMailMessage message = new SimpleMailMessage();
             message.setSubject("User Account Verification");
             message.setFrom("kosuanyeeaung44250@gmail.com");
             message.setTo(to);
-            message.setText("Hay this is working");
+            message.setText("To enter your code use this code " + code);
             javaMailSender.send(message);
         }catch (Exception e){
             System.out.println(e.getMessage());

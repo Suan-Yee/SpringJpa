@@ -15,13 +15,15 @@
         <div class="row m-l-0 m-r-0">
           <div class="col-sm-4 bg-c-lite-green green-bg user-profile">
             <div class="card-block text-center text-white">
-              <div class="m-b-25">
-                <img src="https://img.icons8.com/bubbles/100/000000/user.png" class="img-radius" alt="User-Profile-Image">
+              <div class="m-b-25 profile-image-container">
+                <img src="/images/${student.imageUrl}" alt="Profile Image" class="img-radius profile-image" alt="User-Profile-Image">
               </div>
 
               <h6 class="f-w-600">${student.name}</h6>
               <p>${student.education}</p>
-              <i class=" mdi mdi-square-edit-outline feather icon-edit m-t-10 f-16  fa-solid fa-pen-to-square"></i>
+              <a href="updateStudent?studentId=${student.id}">
+                <i class=" mdi mdi-square-edit-outline feather icon-edit m-t-10 f-16  fa-solid fa-pen-to-square"></i>
+              </a>
             </div>
 
           </div>
@@ -72,4 +74,19 @@
 </div>
 </div>
 </c:if>
+<style>
+  .profile-image-container {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    border-radius: 50%;
+    border: 2px solid #fff;
+  }
+
+  .profile-image {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+</style>
 <%@include file="../layouts/footer.jsp" %>

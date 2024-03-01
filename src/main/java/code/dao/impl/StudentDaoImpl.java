@@ -5,10 +5,20 @@ import code.entity.Student;
 import code.utils.JPAUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 @Service
 @Component
@@ -127,4 +137,20 @@ public class StudentDaoImpl implements StudentDao {
             }
         }
     }
+    private final Function<String,String> fileExtension = (fileName) -> Optional.of(fileName)
+            .filter(name -> name.contains(".")).map(name -> "." + name.substring(fileName.lastIndexOf(".")+ 1)).orElse(".png");
+
+    private final BiFunction<String, MultipartFile,String> photoFunctions = (id, image) -> {
+        String fileName =  id + fileExtension.apply(image.getOriginalFilename());
+        try{
+            Path fileStorageLocation = Paths.get(System.getProperty("user.home") + "/Downloads/uploads/").toAbsolutePath().normalize();
+            if(!Files.exists(fileStorageLocation)) {Files.createDirectories(fileStorageLocation);}
+            Files.copy(image.getInputStream(),fileStorageLocation.resolve(fileName),REPLACE_EXISTING);
+            return ServletUriComponentsBuilder
+                    .fromCurrentContextPath()
+                    .path("/contacts/image/" + fileName).toUriString();
+        }catch(Exception e){
+            throw new RuntimeException("Unable to save image");
+        }
+    };
 }

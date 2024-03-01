@@ -14,14 +14,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -43,8 +48,21 @@ public class StudentController {
         return modelAndView;
     }
     @PostMapping("/addStudent")
-    public String student_detail(@ModelAttribute("register") RegisterForm rgForm, Model model){
+    public String student_detail(@ModelAttribute("register") RegisterForm rgForm, Model model,HttpServletRequest request){
 
+        MultipartFile file = rgForm.getStudent().getFile();
+        String rootDirectory = request.getSession().getServletContext().getRealPath("/");
+        Path path = Paths.get(rootDirectory  + "WEB-INF/images/" + rgForm.getStudent().getName() + ".png");
+
+        if(file != null && !file.isEmpty()){
+            try{
+                file.transferTo(new File(path.toString()));
+            }catch (IOException e){
+                e.printStackTrace();
+                throw new RuntimeException("File cannot be upload");
+            }
+        }
+        String imageName = rgForm.getStudent().getName() + ".png";
 
         List<Long> course_idList  = rgForm.getCourses();
         List<Course> courseList = new ArrayList<>();
@@ -54,6 +72,7 @@ public class StudentController {
             courseList.add(course);
         }
         Student student = rgForm.getStudent();
+        student.setImageUrl(imageName);
         Student add_student = studentDao.createStudent(student);
         System.out.println(add_student.getName() + add_student.getDob());
 
@@ -198,5 +217,7 @@ public class StudentController {
         model.addAttribute("course",courses);
         return "student/details";
     }
+
+
 
 }

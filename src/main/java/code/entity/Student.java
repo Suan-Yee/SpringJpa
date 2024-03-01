@@ -25,6 +25,10 @@ public class Student {
     private String gender;
     private String phone;
     private String education;
+    private String imageUrl;
+
+    @Transient
+    private MultipartFile file;
 
     @OneToMany(mappedBy = "student",fetch = FetchType.EAGER)
     private Set<Enroll> studentCourse = new HashSet<>();

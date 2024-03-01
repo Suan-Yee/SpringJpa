@@ -6,7 +6,7 @@
     <jsp:include page="../layouts/sidenav.jsp"/>
     <div class="main_contents">
         <div id="sub_content">
-            <form:form method="post" modelAttribute="register" action="addStudent" id="form-ad">
+            <form:form method="post" modelAttribute="register" action="addStudent" id="form-ad" enctype="multipart/form-data">
                 <h2 class="col-md-6 offset-md-2 mb-5 mt-4">Student Registration</h2>
                 <div class="row mb-4">
                     <div class="col-md-2"></div>
@@ -80,10 +80,10 @@
 
                 <div class="row mb-4">
                     <div class="col-md-2"></div>
-                    <label for="name" class="col-md-2 col-form-label">Photo</label>
+                    <label for="file" class="col-md-2 col-form-label">Photo</label>
                     <div class="col-md-4">
-                        <input type="file" path="" class="form-control" id="name"
-                               accept="image/*" multiple="true">
+                        <form:input type="file" path="student.file" class="form-control" name="file" id="file"
+                                    accept="image/*" multiple="true"></form:input>
                     </div>
                 </div>
 

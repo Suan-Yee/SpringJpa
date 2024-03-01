@@ -17,7 +17,7 @@ public interface UserDao {
     List<User> findAll();
     List<User> findByIdOrUserName(Long userId,String name);
     Integer validEmail(String email);
-    void generateOtp(User user);
+    String generateOtp(User user);
     boolean deleteOtp(Long userId);
     boolean isExpire(Long userId);
     OTP findByUserId(Long userId);

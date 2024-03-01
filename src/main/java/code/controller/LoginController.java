@@ -28,7 +28,7 @@ public class LoginController {
     public ModelAndView loginUser(){
         return new ModelAndView("user/login","bean",new User());
     }
-   /* @GetMapping("/otp")
+    @GetMapping("/otp")
     public ModelAndView enterOtp(){
         return new ModelAndView("user/confirmOTP","otp",new OTP());
     }
@@ -50,7 +50,7 @@ public class LoginController {
             session.invalidate();
         }
         return "redirect:/";
-    }*/
+    }
     @PostMapping("/login")
     public String login(@ModelAttribute("bean") @Validated User user, ModelMap model, HttpSession session){
 
@@ -67,9 +67,12 @@ public class LoginController {
         }else{
             session.setAttribute("valid_user",loginUser);
             /*userDao.deleteOtp(loginUser.getId());
-            userDao.generateOtp(loginUser);*/
+            String code = userDao.generateOtp(loginUser);
+            System.out.println(code);
+            emailService.sendEmail(loginUser.getEmail(),code);*/
         }
         return "redirect:/welcome";
+
     }
     @GetMapping("/logout")
     public String logout(HttpServletRequest request){

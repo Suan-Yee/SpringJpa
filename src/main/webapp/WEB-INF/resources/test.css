@@ -291,7 +291,7 @@ body {
 }
 
 .img-radius {
-    border-radius: 5px;
+    border-radius: 7px;
 }
 
 
@@ -348,6 +348,7 @@ h6 {
 .f-w-600 {
     font-weight: 600;
 }
+
 
 .m-b-20 {
     margin-bottom: 20px;
