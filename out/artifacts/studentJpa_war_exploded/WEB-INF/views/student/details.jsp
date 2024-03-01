@@ -6,6 +6,10 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@include file="../layouts/header.jsp" %>
+<% User log_user = (User) session.getAttribute("valid_user");%>
+<% if(log_user == null){
+  response.sendRedirect("/");
+}%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:if test="${not empty course}">
 <div class="padding">
@@ -16,10 +20,14 @@
           <div class="col-sm-4 bg-c-lite-green green-bg user-profile">
             <div class="card-block text-center text-white">
               <div class="m-b-25 profile-image-container">
-                <c:if test="not empty student.imageUrl">
-                  <img src="/images/${student.imageUrl}" alt="Profile Image" class="img-radius profile-image" alt="User-Profile-Image">
-                </c:if>
-                 <img src="/images/Akon.png" alt="Profile Image" class="img-radius profile-image" alt="User-Profile-Image">
+                <c:choose>
+                  <c:when test="${not empty student.imageUrl}">
+                    <img src="/images/${student.imageUrl}" alt="Profile Image" class="img-radius profile-image" alt="User-Profile-Image">
+                  </c:when>
+                  <c:otherwise>
+                    <img src="/images/Akon.png" alt="Profile Image" class="img-radius profile-image" alt="User-Profile-Image">
+                  </c:otherwise>
+                </c:choose>
               </div>
 
               <h6 class="f-w-600">${student.name}</h6>

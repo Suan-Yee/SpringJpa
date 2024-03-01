@@ -1,9 +1,16 @@
+<%@ page import="code.entity.User" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:include page="../layouts/header.jsp"/>
 
 <!-- <div id="testsidebar">Hello World </div> -->
 <div class="container">
     <jsp:include page="../layouts/sidenav.jsp"/>
+            <% User log_user = (User) session.getAttribute("valid_user");%>
+
+            <% if(log_user == null){
+                response.sendRedirect("/");
+            }%>
     <div class="main_contents">
         <div id="sub_content">
             <form:form method="post" modelAttribute="register" action="addStudent" id="form-ad" enctype="multipart/form-data">
@@ -55,7 +62,7 @@
 
                 <div class="row mb-4">
                     <div class="col-md-2"></div>
-                    <form:label path="student.education" for="education" class="col-form-label">Education</form:label>
+                    <form:label path="student.education"  for="education" class="col-md-2 col-form-label">Education</form:label>
                     <div class="col-md-5" class="input-control">
                         <form:select path="student.education" class="form-select" aria-label="Education" id="education">
                             <form:option id="education" value="Bachelor of Information Technology">Bachelor of Information Technology</form:option>
@@ -68,15 +75,19 @@
                 <fieldset class="row mb-5">
                     <div class="col-md-2"></div>
                     <legend class="col-form-label col-md-2 pt-0">Attend</legend>
-
                     <div class="col-md-5">
-                        <div class="form-check-inline col-md-5">
-                            <div class="col-md-4" class="input-control"></div>
-                            <form:checkboxes items="${courses}" path="courses" itemValue="id" itemLabel="name"/>
-                            <div class="error"></div>
+                        <c:forEach items="${courses}" var="course">
+                        <div class="form-check-inline col-md-2">
+                            <input class="form-check-label" type="checkbox" name="courses" value="${course.id}" />
+                            <label class="form-check-label" for="gridRadios${course.id}">
+                                    ${course.name}
+                            </label>
                         </div>
+                            </c:forEach>
+                            <div class="error"></div>
                     </div>
                 </fieldset>
+
 
                 <div class="row mb-4">
                     <div class="col-md-2"></div>

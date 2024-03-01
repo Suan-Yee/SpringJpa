@@ -10,7 +10,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 @Service
-@Component
 public class InstructorDaoImpl implements InstructorDao {
 
 

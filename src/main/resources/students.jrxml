@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.5.final using JasperReports Library version 6.20.5-3efcf2e67f959db3888d79f73dde2dbd7acb4f8e  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4_1" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="937df099-4c11-4d04-9ed2-d96b3e57c903">
+    <property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="412"/>
+    <property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="577"/>
+    <field name="name" class="java.lang.String">
+
+    </field>
+    <field name="gender" class="java.lang.String">
+
+    </field>
+    <field name="phone" class="java.lang.String">
+
+    </field>
+    <field name="education" class="java.lang.String">
+
+    </field>
+    <background>
+        <band/>
+    </background>
+    <title>
+        <band height="55" splitType="Stretch">
+            <staticText>
+                <reportElement x="180" y="2" width="200" height="50" uuid="b6c44ca2-ff60-4657-b4f0-a2a52a64db0a"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="24" isBold="true"/>
+                </textElement>
+                <text><![CDATA[Student Details]]></text>
+            </staticText>
+            <textField pattern="MMMMM dd, yyyy">
+                <reportElement x="450" y="2" width="100" height="30" uuid="9c023d50-e9af-429b-b5c8-6df711a2aaef"/>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+            </textField>
+        </band>
+    </title>
+    <columnHeader>
+        <band height="44" splitType="Stretch">
+            <staticText>
+                <reportElement x="110" y="0" width="100" height="30" uuid="a0f43a2b-c3b6-46bf-a0c2-5f23570087af"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[NAME]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="230" y="0" width="100" height="30" uuid="7776ee82-32f7-4f5d-967a-3613750fad53"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[GENDER]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="350" y="0" width="100" height="30" uuid="7813fac8-f63a-4c83-85c8-e9f29dc93e11"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[PHONE]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="470" y="0" width="100" height="30" uuid="52a14c20-ebd3-4427-875e-03d682d213cf"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[EDUCATION]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="-10" y="0" width="100" height="30" uuid="af2abca6-968c-4519-80b2-9b8fe8bbd230"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[ID]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="46" splitType="Stretch">
+            <textField>
+                <reportElement x="110" y="0" width="100" height="30" uuid="fbe66a8d-eddf-4b9e-960b-20ccdf399c7d"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="230" y="0" width="100" height="30" uuid="7c5c461a-bd35-4aca-8cc2-0a3a64ed0589"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{gender}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="350" y="0" width="100" height="30" uuid="4a9950cb-4502-4c5c-8cee-cd29d2e2f24e"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{phone}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="470" y="0" width="100" height="30" uuid="04678153-c594-411a-a260-3da201b44953"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$F{education}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="-10" y="0" width="100" height="30" uuid="e5336192-dca1-45d3-a0c0-ff1c61c7f96e"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle"/>
+                <textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+    <columnFooter>
+        <band height="45" splitType="Stretch"/>
+    </columnFooter>
+    <pageFooter>
+        <band height="64" splitType="Stretch">
+            <textField>
+                <reportElement x="460" y="34" width="100" height="30" uuid="b945f47c-e7d2-4af8-ac2e-f27995807886"/>
+                <textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+    <summary>
+        <band height="42" splitType="Stretch"/>
+    </summary>
+</jasperReport>

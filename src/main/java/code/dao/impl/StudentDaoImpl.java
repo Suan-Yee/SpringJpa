@@ -21,7 +21,6 @@ import java.util.function.Function;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 @Service
-@Component
 public class StudentDaoImpl implements StudentDao {
 
     @Override

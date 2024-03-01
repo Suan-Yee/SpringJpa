@@ -20,7 +20,7 @@ public class EmailServiceImpl implements EmailService {
             message.setSubject("User Account Verification");
             message.setFrom("kosuanyeeaung44250@gmail.com");
             message.setTo(to);
-            message.setText("To enter your code use this code " + code);
+            message.setText("To enter your account use this code " + code);
             javaMailSender.send(message);
         }catch (Exception e){
             System.out.println(e.getMessage());

@@ -4,6 +4,11 @@
 <div class="container">
 
     <%@include file="../layouts/sidenav.jsp" %>
+            <% User log_user = (User) session.getAttribute("valid_user");%>
+
+            <% if(log_user == null){
+                response.sendRedirect("/");
+            }%>
         <% Student student  = (Student) request.getAttribute("student"); %>
 
     <div class="main_contents">
@@ -114,9 +119,9 @@
 
                 <div class="row mb-4">
                     <div class="col-md-2"></div>
-                    <label for="file" class="col-md-2 col-form-label">Photo</label>
-                    <div class="col-md-4">
-                        <form:input type="file" path="student.file" class="form-control" name="file" id="file"
+                    <img src="/images/${student.imageUrl}" id="profileImage" class=" profile-image" alt="User-Profile-Image">
+                        <div class="col-md-4">
+                        <form:input type="file" path="student.file" class="form-control" name="file" id="fileInput"
                                     accept="image/*" multiple="true"></form:input>
                     </div>
                 </div>
@@ -143,6 +148,16 @@
             </div>
         </div>
     </div>
+        <style>
+
+            .profile-image {
+                width: 125px;
+                height: 125px;
+                object-fit: cover;
+                display: block;
+                border-radius: 50%;
+            }
+        </style>
         <script>
 
             document.addEventListener('DOMContentLoaded', function() {
@@ -196,6 +211,20 @@
 
                     return !document.querySelectorAll('.error.show').length;
                 };
+            });
+            document.getElementById('fileInput').addEventListener('change', function (e) {
+                const profileImage = document.getElementById('profileImage');
+                const fileInput = e.target;
+
+                if (fileInput.files && fileInput.files[0]) {
+                    const reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        profileImage.src = e.target.result;
+                    };
+
+                    reader.readAsDataURL(fileInput.files[0]);
+                }
             });
         </script>
 <%@include file="../layouts/footer.jsp" %>

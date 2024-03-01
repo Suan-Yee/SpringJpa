@@ -5,7 +5,11 @@
 
 <div class="container">
     <%@include file="../layouts/sidenav.jsp" %>
+    <% User log_user = (User) session.getAttribute("valid_user");%>
 
+    <% if(log_user == null){
+        response.sendRedirect("/");
+    }%>
     <div class="main_contents">
         <div id="sub_content">
             <form:form method="get" action="searchStudent" class="row g-3 mt-3 ms-2">
@@ -31,6 +35,15 @@
                     <a href="studentList" class="btn btn-danger">Reset</a>
                 </div>
             </form:form>
+
+            <form action="generateReport" method="post">
+                <button class="btn btn-danger mb-3" type="submit">Download Report(PDF)</button>
+            </form>
+
+            <%--<form action="generateReportExcel" method="post">
+                <button class="btn btn-success mb-3" type="submit">Download Report(Excel)</button>
+            </form>
+--%>
 
             <div>
                 <table class="table table-success table-striped" id="stduentTable">
@@ -140,5 +153,6 @@
             window.location.href = deleteUrl;
         }
     });
+
 </script>
 <%@include file="../layouts/footer.jsp" %>

@@ -4,6 +4,10 @@
 <div class="main_contents">
     <div id="sub_content">
         <% User log_user = (User) session.getAttribute("valid_user");%>
+
+        <% if(log_user == null){
+            response.sendRedirect("/");
+        }%>
         <form method="post" action="userUpdate">
 
             <h2 class="col-md-6 offset-md-2 mb-5 mt-4">User Update</h2>
@@ -29,7 +33,8 @@
                 <div class="col-md-4">
                     <input type="email" value="<%=c_user.getEmail()%>" class="form-control" name="email" disabled id="email">
                     <% if(log_user.getEmail().equalsIgnoreCase(c_user.getEmail())) { %>
-                    <button style="margin-top: 20px" type="button" class="btn btn-dark" onclick="changeEmail()">Change Email</button>
+                    <button style="margin-top: 20px" type="button" class="btn btn-dark" onclick="setUserId(${user.id})">Change Email</button>
+                    <%System.out.println(c_user.getId());%>
                     <% } %>
                 </div>
             </div>
@@ -70,9 +75,15 @@
 </div>
 
 <script>
-    function changeEmail() {
-        window.location.href = 'changePassword';
+    function setUserId(userId){
+        userIdToDelete = userId;
+
+        if (userIdToDelete) {
+            let deleteUrl = 'changeEmail?userId=' + userIdToDelete;
+            window.location.href = deleteUrl;
+        }
     }
+
 </script>
 
 <%@ include file="../layouts/footer.jsp"%>

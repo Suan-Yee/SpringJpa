@@ -1,4 +1,5 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,7 +27,12 @@
         <h1>Enter OTP Code!</h1>
       </div>
     </div>
-    <div style="color: red;">${error}</div><br>
+    <c:if test="${not empty error}">
+    <p class="error alert">${error}</p>
+    </c:if>
+    <c:if test="${not empty gmail}">
+      <p style="color: #328f8a" class="alert">${gmail}</p>
+    </c:if>
     <form:form action="/confirm" modelAttribute="otp" class="login-form" method="post">
       <form:input  type="text" path="otpCode" placeholder="Please enter the OTP code send to your email"/>
       <button type="submit">Enter</button>

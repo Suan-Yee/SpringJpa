@@ -1,8 +1,14 @@
 <%@ page import="code.entity.User" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%User log_user = (User) request.getSession().getAttribute("valid_user");%>
 <%@ include file="../layouts/header.jsp" %>
 <div class="container">
+
+    <% User log_user = (User) session.getAttribute("valid_user");%>
+
+    <% if(log_user != null){%>
+    <%@ include file="../layouts/sidenav.jsp"%>
+    <%}%>
+
     <div class="main_contents">
         <div id="sub_content">
             <form:form method="post" modelAttribute="user" action="addUser">

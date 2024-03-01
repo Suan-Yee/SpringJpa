@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -109,7 +110,6 @@ public class StudentController {
         model.addAttribute("students",allStudents);
 
         return "student/student_details";
-
     }
     @GetMapping("/deleteStudent")
     public String deleteUser(@RequestParam("studentId")Long studentId, RedirectAttributes redirectAttributes){
@@ -169,23 +169,57 @@ public class StudentController {
         return "student/details";
     }
 
-    private String saveImage(RegisterForm rgf,HttpServletRequest request){
-
+    private String saveImage(RegisterForm rgf, HttpServletRequest request) {
         MultipartFile file = rgf.getStudent().getFile();
         String rootDirectory = request.getSession().getServletContext().getRealPath("/");
-        Path path = Paths.get(rootDirectory  + "WEB-INF/images/" + rgf.getStudent().getName() + ".png");
+        String existingImageName = getImageNameForStudent(rgf.getStudent().getName(), rootDirectory);
 
-        if(file != null && !file.isEmpty()){
-            try{
+        if (existingImageName != null) {
+            deleteImage(existingImageName, rootDirectory);
+        }
+
+        if (file != null && !file.isEmpty()) {
+            try {
+                String originalFileName = file.getOriginalFilename();
+                String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+                String imageName = rgf.getStudent().getName() + "_" + System.currentTimeMillis() + fileExtension;
+
+                Path path = Paths.get(rootDirectory + "WEB-INF/images/" + imageName);
                 file.transferTo(new File(path.toString()));
-            }catch (IOException e){
+
+                return imageName;
+            } catch (IOException e) {
                 e.printStackTrace();
-                throw new RuntimeException("File cannot be upload");
+                throw new RuntimeException("File cannot be uploaded");
             }
         }
-        String imageName = rgf.getStudent().getName() + ".png";
-        return imageName;
+        return null;
     }
+    private String getImageNameForStudent(String studentName, String rootDirectory) {
+        String[] extensions = {".png", ".jpg", ".jpeg", ".gif"};
+
+        for (String extension : extensions) {
+            String imageName = studentName + extension;
+            Path imagePath = Paths.get(rootDirectory + "WEB-INF/images/" + imageName);
+
+            if (Files.exists(imagePath)) {
+                return imageName;
+            }
+        }
+
+        return null;
+    }
+
+    private void deleteImage(String imageName, String rootDirectory) {
+        try {
+            Path imagePath = Paths.get(rootDirectory, "WEB-INF", "images", imageName);
+            Files.deleteIfExists(imagePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to delete the previous image");
+        }
+    }
+
 
     private List<Student> saveStudent(RegisterForm rg,String image){
 

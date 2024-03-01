@@ -2,6 +2,12 @@
 <%@include file="../layouts/header.jsp" %>
 <div class="container">
   <%@include file="../layouts/sidenav.jsp" %>
+  <% User log_user = (User) session.getAttribute("valid_user");%>
+
+  <% if(log_user == null){
+    response.sendRedirect("/");
+  }%>
+
   <div class="main_contents">
     <div id="sub_content">
       <form:form method="post" modelAttribute="instructor" action="addInstructor" id="form-ad">

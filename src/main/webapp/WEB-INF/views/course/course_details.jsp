@@ -6,6 +6,9 @@
     <%@include file="../layouts/sidenav.jsp" %>
 
     <% User log_user = (User) session.getAttribute("valid_user");%>
+    <% if(log_user == null){
+        response.sendRedirect("/");
+    }%>
     <div class="main_contents">
         <div id="sub_content">
             <form:form method="get" action="searchCourse" class="row g-3 mt-3 ms-2">

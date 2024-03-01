@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Random;
 
 @Service
-@Component
 public class CourseDaoImpl implements CourseDao {
 
     private static int getRandomBit() {
