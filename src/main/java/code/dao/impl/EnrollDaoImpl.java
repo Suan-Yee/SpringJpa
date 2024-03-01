@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -68,6 +69,23 @@ public class EnrollDaoImpl implements EnrollDao {
             return deletedCount > 0;
         } finally {
             if (em != null && em.isOpen()) {
+                em.close();
+            }
+        }
+    }
+
+    @Override
+    public List<Student> findByCourse(Long courseId) {
+        EntityManager em = null;
+        try {
+            em = JPAUtil.getEntityManagerFactory().createEntityManager();
+            TypedQuery<Student> query = em.createQuery("SELECT e.student FROM Enroll e WHERE e.course.id = :courseId",Student.class);
+            query.setParameter("courseId",courseId);
+
+            List<Student> students = query.getResultList();
+            return students;
+        }finally {
+            if(em != null && em.isOpen()){
                 em.close();
             }
         }

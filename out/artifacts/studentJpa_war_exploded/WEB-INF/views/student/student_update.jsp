@@ -8,7 +8,7 @@
 
     <div class="main_contents">
         <div id="sub_content">
-            <form:form method="post" action="updateStudentAction" modelAttribute="register" id="form-ad">
+            <form:form method="post" action="updateStudentAction" modelAttribute="register" id="form-ad" enctype="multipart/form-data">
 
             <h2 class="col-md-6 offset-md-2 mb-5 mt-4">Student Update</h2>
             <div class="row mb-4">
@@ -109,6 +109,15 @@
                         <form:input path="student.phone" type="text"  class="form-control" id="phone"
                                     placldehoer="Please enter your phone number" value="<%=student.getPhone()%>" maxlength="11"></form:input>
                         <div class="error"></div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-2"></div>
+                    <label for="file" class="col-md-2 col-form-label">Photo</label>
+                    <div class="col-md-4">
+                        <form:input type="file" path="student.file" class="form-control" name="file" id="file"
+                                    accept="image/*" multiple="true"></form:input>
                     </div>
                 </div>
 

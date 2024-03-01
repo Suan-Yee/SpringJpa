@@ -22,7 +22,7 @@ public class InstructorController {
         return new ModelAndView("instructor/instructor_reg","instructor",new Instructor()) ;
     }
     @PostMapping("addInstructor")
-    public String addInstructor(@ModelAttribute("instructor")Instructor instructor, Model model){
+    public String addInstructor(@ModelAttribute("instructor") Instructor instructor, Model model){
         instructorDao.create(instructor);
         return "user/welcome";
     }

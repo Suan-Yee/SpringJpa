@@ -6,6 +6,7 @@
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/course/course_details.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/course" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/student/studentRegister.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/student" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/student/student_details.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/student" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/student/student_update.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/student" />
       </map>
     </option>
   </component>

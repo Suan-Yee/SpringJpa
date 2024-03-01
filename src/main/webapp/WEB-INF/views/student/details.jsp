@@ -16,7 +16,10 @@
           <div class="col-sm-4 bg-c-lite-green green-bg user-profile">
             <div class="card-block text-center text-white">
               <div class="m-b-25 profile-image-container">
-                <img src="/images/${student.imageUrl}" alt="Profile Image" class="img-radius profile-image" alt="User-Profile-Image">
+                <c:if test="not empty student.imageUrl">
+                  <img src="/images/${student.imageUrl}" alt="Profile Image" class="img-radius profile-image" alt="User-Profile-Image">
+                </c:if>
+                 <img src="/images/Akon.png" alt="Profile Image" class="img-radius profile-image" alt="User-Profile-Image">
               </div>
 
               <h6 class="f-w-600">${student.name}</h6>
@@ -81,12 +84,15 @@
     overflow: hidden;
     border-radius: 50%;
     border: 2px solid #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   }
 
   .profile-image {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
     display: block;
+    border-radius: 50%;
   }
 </style>
 <%@include file="../layouts/footer.jsp" %>

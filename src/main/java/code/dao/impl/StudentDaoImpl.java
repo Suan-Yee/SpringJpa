@@ -102,6 +102,7 @@ public class StudentDaoImpl implements StudentDao {
                 updateStudent.setGender(student.getGender());
                 updateStudent.setEducation(student.getEducation());
                 updateStudent.setPhone(student.getPhone());
+                updateStudent.setImageUrl(student.getImageUrl());
                 Student updatedStudent = em.merge(updateStudent);
                 em.getTransaction().commit();
                 return updatedStudent;

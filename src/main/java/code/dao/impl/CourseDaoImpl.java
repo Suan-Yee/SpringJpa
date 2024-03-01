@@ -11,10 +11,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.Random;
 
 @Service
 @Component
 public class CourseDaoImpl implements CourseDao {
+
+    private static int getRandomBit() {
+        Random rand = new Random();
+        return rand.nextInt(2);
+    }
+
 
     @Override
     public Course createCourse(Course course) {
@@ -22,6 +29,12 @@ public class CourseDaoImpl implements CourseDao {
         try{
             em = JPAUtil.getEntityManagerFactory().createEntityManager();
             em.getTransaction().begin();
+            if (getRandomBit() == 0){
+                course.setStatus("publish");
+            }else{
+                course.setStatus("pending");
+            }
+            course.setEnabled(true);
             em.persist(course);
             em.getTransaction().commit();
         }finally {

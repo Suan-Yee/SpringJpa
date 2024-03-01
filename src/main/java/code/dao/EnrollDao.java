@@ -10,4 +10,5 @@ public interface EnrollDao {
     boolean saveEnrollment(Student student, Course course);
     List<Long> findCourseByStudentId(Long studentId);
     boolean deleteCourseAndStudent(Long studentId);
+    List<Student> findByCourse(Long courseId);
 }

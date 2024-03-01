@@ -1,6 +1,7 @@
 package code.entity;
 
 
+import com.sun.istack.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -18,6 +19,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String username;
     private String firstName;
     private String lastName;
