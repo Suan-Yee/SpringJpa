@@ -12,6 +12,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -77,12 +78,13 @@ public class EnrollDaoImpl implements EnrollDao {
     @Override
     public List<Student> findByCourse(Long courseId) {
         EntityManager em = null;
+        List<Student> students = Collections.emptyList();
         try {
             em = JPAUtil.getEntityManagerFactory().createEntityManager();
             TypedQuery<Student> query = em.createQuery("SELECT e.student FROM Enroll e WHERE e.course.id = :courseId",Student.class);
             query.setParameter("courseId",courseId);
 
-            List<Student> students = query.getResultList();
+            students = query.getResultList();
             return students;
         }finally {
             if(em != null && em.isOpen()){

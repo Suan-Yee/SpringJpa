@@ -94,7 +94,7 @@ public class StudentController {
 
         String image = saveImage(reg,request);
         String str_id  = request.getParameter("hide");
-        Long id = Long.valueOf(0);
+        Long id = 0L;
         if (str_id != null && !str_id.isEmpty()) {
 
             try {
@@ -103,7 +103,10 @@ public class StudentController {
                 throw new NumberFormatException("Invalid value for id: " + str_id);
             }
         }
-        List<Long> course_id = course_id(select_course);
+        List<Long> course_id = null;
+        if (select_course != null) {
+            course_id = course_id(select_course);
+        }
         updateStudent(reg,id,gender,education,image,course_id);
         List<Student> allStudents  = studentDao.findAllStudent();
 
@@ -139,15 +142,22 @@ public class StudentController {
             model.addAttribute("students", Collections.singletonList(student));
         } else if (studentName != null && !studentName.isEmpty()) {
             List<Student> students = studentDao.findByName(studentName);
-            if(students == null){
+            if(students.isEmpty()){
                 model.addAttribute("error","There is no student found");
             }
             model.addAttribute("students", students);
         } else if (studentCourse != null && !studentCourse.isEmpty()) {
             Course course = courseDao.findByName(studentCourse);
-            Long course_id = course.getId();
-            List<Student> students = enrollDao.findByCourse(course_id);
-            model.addAttribute("students", students);
+            if(course == null){
+                model.addAttribute("error","Unregister course");
+            }else {
+                Long course_id = course.getId();
+                List<Student> students = enrollDao.findByCourse(course_id);
+                if(students.isEmpty()){
+                    model.addAttribute("error","There is not student register in given course");
+                }
+                model.addAttribute("students", students);
+            }
         } else {
             List<Student> allStudents = studentDao.findAllStudent();
             model.addAttribute("students", allStudents);
@@ -172,52 +182,18 @@ public class StudentController {
     private String saveImage(RegisterForm rgf, HttpServletRequest request) {
         MultipartFile file = rgf.getStudent().getFile();
         String rootDirectory = request.getSession().getServletContext().getRealPath("/");
-        String existingImageName = getImageNameForStudent(rgf.getStudent().getName(), rootDirectory);
-
-        if (existingImageName != null) {
-            deleteImage(existingImageName, rootDirectory);
-        }
+        Path path = Paths.get(rootDirectory + "WEB-INF/images/" + rgf.getStudent().getName() + ".png");
 
         if (file != null && !file.isEmpty()) {
             try {
-                String originalFileName = file.getOriginalFilename();
-                String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
-                String imageName = rgf.getStudent().getName() + "_" + System.currentTimeMillis() + fileExtension;
-
-                Path path = Paths.get(rootDirectory + "WEB-INF/images/" + imageName);
                 file.transferTo(new File(path.toString()));
-
-                return imageName;
             } catch (IOException e) {
                 e.printStackTrace();
-                throw new RuntimeException("File cannot be uploaded");
+                throw new RuntimeException("File cannot be upload");
             }
         }
-        return null;
-    }
-    private String getImageNameForStudent(String studentName, String rootDirectory) {
-        String[] extensions = {".png", ".jpg", ".jpeg", ".gif"};
-
-        for (String extension : extensions) {
-            String imageName = studentName + extension;
-            Path imagePath = Paths.get(rootDirectory + "WEB-INF/images/" + imageName);
-
-            if (Files.exists(imagePath)) {
-                return imageName;
-            }
-        }
-
-        return null;
-    }
-
-    private void deleteImage(String imageName, String rootDirectory) {
-        try {
-            Path imagePath = Paths.get(rootDirectory, "WEB-INF", "images", imageName);
-            Files.deleteIfExists(imagePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to delete the previous image");
-        }
+        String imageName = rgf.getStudent().getName() + ".png";
+        return imageName;
     }
 
 
@@ -264,12 +240,14 @@ public class StudentController {
         Student add_student = studentDao.updateStudent(student);
         enrollDao.deleteCourseAndStudent(add_student.getId());
         List<Course> courseList = new ArrayList<>();
-        for(Long cur: course_id){
-            Course course = courseDao.findById(cur);
-            courseList.add(course);
-        }
-        for(Course course : courseList){
-            enrollDao.saveEnrollment(add_student,course);
+        if(course_id != null){
+            for(Long cur: course_id){
+                Course course = courseDao.findById(cur);
+                courseList.add(course);
+            }
+            for(Course course : courseList){
+                enrollDao.saveEnrollment(add_student,course);
+            }
         }
     }
 

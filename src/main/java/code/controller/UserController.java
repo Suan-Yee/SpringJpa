@@ -109,10 +109,11 @@ public class UserController {
                              @RequestParam(name = "name", required = false) String userName,
                              Model model) {
 
+        List<User> searchResults;
         if(userId != null || (userName != null && !userName.isEmpty())){
 
-            List<User> searchResults = userDao.findByIdOrUserName(userId, userName);
-            if(searchResults == null){
+            searchResults = userDao.findByIdOrUserName(userId, userName);
+            if(searchResults.isEmpty()){
                 model.addAttribute("errors","There is no user found");
             }
             model.addAttribute("users", searchResults);

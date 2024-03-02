@@ -1,4 +1,5 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="java.util.List" %>
 <%@ page import="code.entity.User" %>
 
@@ -52,6 +53,8 @@
                 </thead>
 
                 <tbody>
+                <c:choose>
+                    <c:when test="${empty errors}">
                 <%
                     List<User> users = (List<User>) request.getAttribute("users");
                     int count = 1;
@@ -92,9 +95,8 @@
                         </button>
                     </a></td>
                     <td>
-                        <a href="deleteUser?userId=<%=user_list.getId()%>">
                         <button type="button" class="btn btn-danger mb-3"
-                                data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="setUserId(<%=user_list.getId()%>)"
+                                data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="setStudentId(<%=user_list.getId()%>)"
                                 <% if (log_user != null && log_user.getRole().getName().equalsIgnoreCase("ADMIN")) {
                                     if (user_list.getRole().getName().equalsIgnoreCase("ADMIN") && !log_user.getEmail().equals(user_list.getEmail())) { %>
                                 disabled
@@ -105,7 +107,7 @@
                                 <% }
                                 } %>>
                             DELETE
-                        </button></a>
+                        </button>
                     </td>
 
                 </tr>
@@ -113,6 +115,16 @@
                         }
                     }
                 %>
+    </c:when>
+    <c:otherwise>
+        <c:if test="${not empty errors}">
+            <tr>
+                <td colspan="7">${errors}</td>
+            </tr>
+        </c:if>
+
+    </c:otherwise>
+</c:choose>
                 </tbody>
             </table>
 
@@ -138,18 +150,17 @@
     </div>
 </div>
 <script>
-    let userIdToDelete;
+    let studentIdToDelete;
 
-    function setUserId(userId) {
-        userIdToDelete = userId;
+    function setStudentId(studentId) {
+        studentIdToDelete = studentId;
     }
-
-    document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
-        if (userIdToDelete) {
-            let deleteUrl = 'deleteUser?userId=' + userIdToDelete;
-            window.location.href = deleteUrl;
-        }
-    });
+        document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
+            if (studentIdToDelete) {
+                let deleteUrl = 'deleteUser?userId=' + studentIdToDelete;
+                window.location.href = deleteUrl;
+            }
+        });
 </script>
 
 <%@ include file="../layouts/footer.jsp" %>

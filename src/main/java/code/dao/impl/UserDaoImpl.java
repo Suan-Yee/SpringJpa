@@ -1,6 +1,7 @@
 package code.dao.impl;
 
 import code.dao.UserDao;
+import code.entity.Course;
 import code.entity.OTP;
 import code.entity.Role;
 import code.entity.User;
@@ -13,10 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 @Service
@@ -159,11 +157,10 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> findByIdOrUserName(Long userId, String name) {
         EntityManager em = null;
+        List<User> users = Collections.emptyList();
         try {
             em = JPAUtil.getEntityManagerFactory().createEntityManager();
             TypedQuery<User> query;
-            List<User> users;
-
             if (userId != null) {
                 query = em.createQuery("SELECT u FROM User u WHERE u.id = :id", User.class);
                 query.setParameter("id", userId);
@@ -171,15 +168,7 @@ public class UserDaoImpl implements UserDao {
                 query = em.createQuery("SELECT u FROM User u WHERE u.username = :name", User.class);
                 query.setParameter("name", name);
             }
-
-            em.getTransaction().begin();
             users = query.getResultList();
-            em.getTransaction().commit();
-
-            if (users.isEmpty()) {
-                return null;
-            }
-
             return users;
         } finally {
             if (em != null && em.isOpen()) {

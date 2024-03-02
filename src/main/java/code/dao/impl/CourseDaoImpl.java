@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -62,20 +63,25 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public Course findByName(String name) {
         EntityManager em = null;
-        Course course;
-        try{
+        Course course = null;
+        try {
             em = JPAUtil.getEntityManagerFactory().createEntityManager();
-            TypedQuery<Course> query = em.createQuery("SELECT c FROM Course c WHERE c.name = :name",Course.class);
-            query.setParameter("name",name);
-            course = query.getSingleResult();
-        }finally {
-            if(em != null && em.isOpen()){
+            TypedQuery<Course> query = em.createQuery("SELECT c FROM Course c WHERE c.name = :name", Course.class);
+            query.setParameter("name", name);
+
+            List<Course> resultList = query.getResultList();
+
+            if (!resultList.isEmpty()) {
+
+                course = resultList.get(0);
+            }
+        } finally {
+            if (em != null && em.isOpen()) {
                 em.close();
             }
         }
         return course;
     }
-
     @Override
     public boolean deleteCourse(Long courseId) {
         EntityManager em = null;
@@ -187,18 +193,19 @@ public class CourseDaoImpl implements CourseDao {
     @Override
     public List<Course> findByIdOrName(Long courseId, String name) {
         EntityManager em = null;
-        List<Course> courses;
-        try{
+        List<Course> courses = Collections.emptyList();
+        try {
             em = JPAUtil.getEntityManagerFactory().createEntityManager();
-            TypedQuery<Course> query = em.createQuery("SELECT c FROM Course c where c.id = :id OR c.name = :name",Course.class);
-            query.setParameter("id",courseId);
-            query.setParameter("name",name);
+            TypedQuery<Course> query = em.createQuery("SELECT c FROM Course c WHERE (c.id = :id OR c.name = :name) AND c.enabled = true", Course.class);
+            query.setParameter("id", courseId);
+            query.setParameter("name", name);
             courses = query.getResultList();
-        }finally {
-            if(em != null && em.isOpen()){
+        } finally {
+            if (em != null && em.isOpen()) {
                 em.close();
             }
         }
+
         return courses;
     }
 

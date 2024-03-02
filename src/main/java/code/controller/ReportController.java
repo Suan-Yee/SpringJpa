@@ -25,7 +25,7 @@ public class ReportController {
     @PostMapping("/generateReport")
     public void generateReport(HttpServletResponse response) {
         try {
-            JasperPrint jasperPrint = reportService.exportReport(response);
+            JasperPrint jasperPrint = reportService.exportReport();
             response.setContentType("application/pdf");
             response.setHeader("Content-Disposition", "attachment; filename=myReport.pdf");
 

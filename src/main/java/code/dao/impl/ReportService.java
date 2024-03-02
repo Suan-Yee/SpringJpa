@@ -20,7 +20,7 @@ public class ReportService {
 
     private final StudentDao studentDao;
 
-    public JasperPrint exportReport(HttpServletResponse response) throws JRException, IOException {
+    public JasperPrint exportReport() throws JRException {
         List<Student> studentList = studentDao.findAllStudent();
 
         InputStream templateStream = getClass().getResourceAsStream("/students.jrxml");

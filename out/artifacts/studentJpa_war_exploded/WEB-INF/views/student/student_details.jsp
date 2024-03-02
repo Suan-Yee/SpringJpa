@@ -60,12 +60,10 @@
                     </tr>
                     </thead>
                     <tbody>
-
-                    <c:if test="${not empty students}">
+                    <c:choose>
+                        <c:when test="${empty error}">
                         <c:forEach items="${students}" var="student" varStatus="loopStatus">
                             <tr>
-                                <c:if test="${not empty error}"><td>${error}</td></c:if>
-
                                 <td>${loopStatus.index + 1}</td>
                                 <fmt:formatNumber type="number" pattern="000"
                                                   value="${student.id}" var="formattedId" />
@@ -108,13 +106,18 @@
 
                             </tr>
                         </c:forEach>
-                    </c:if>
+                        </c:when>
+                        <c:otherwise>
+                            <c:if test="${not empty error}">
+            <tr>
+                <td colspan="7">${error}</td>
+            </tr>
+        </c:if>
+    </c:otherwise>
+</c:choose>
 
                     </tbody>
                 </table>
-
-
-
 
                 <div class="modal fade" id="exampleModal" tabindex="-1"
                      aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -70,8 +70,17 @@ public class CourseController {
                                @RequestParam(name = "name", required = false) String courseName,
                                Model model){
 
-        List<Course> courses = courseDao.findByIdOrName(courseId,courseName);
+        List<Course> courses;
+        if(courseId != null  || (courseName != null && !courseName.isEmpty())){
+            courses = courseDao.findByIdOrName(courseId, courseName);
+            if(courses.isEmpty()){
+                model.addAttribute("error","There is no course with search results");
+            }
+        }else{
+            courses = courseDao.findAllCourse();
+        }
         model.addAttribute("courses",courses);
+
 
         return "course/course_details";
     }

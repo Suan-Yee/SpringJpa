@@ -13,6 +13,7 @@ import javax.persistence.TypedQuery;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -57,7 +58,7 @@ public class StudentDaoImpl implements StudentDao {
     @Override
     public List<Student> findByName(String name) {
         EntityManager em = null;
-        List<Student> students;
+        List<Student> students = Collections.emptyList();
         try{
             em = JPAUtil.getEntityManagerFactory().createEntityManager();
             TypedQuery<Student> query = em.createQuery("SELECT s FROM Student s WHERE s.name = :name ",Student.class);

@@ -1,6 +1,7 @@
 <%@ page import="code.entity.Course" %>
 <%@ page import="java.util.List" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="../layouts/header.jsp" %>
 <div class="container">
     <%@include file="../layouts/sidenav.jsp" %>
@@ -53,38 +54,52 @@
                 </thead>
 
                 <tbody>
-                <%
-                    List<Course> courses = (List<Course>) request.getAttribute("courses");
-                    int count = 1;
-                    if (courses != null) {
-                        for (Course course : courses) {
-                %>
-                <tr>
-                    <td><%=count++%></td>
-                    <td><%=String.format("CUR%03d",course.getId())%></td>
-                    <td><%= course.getName() %></td>
-                    <td><%= course.getDescription()%></td>
-                    <td>
-                    <%if(course.getInstructor() != null){ %>
-                    <%= course.getInstructor().getName()%>
-                    <% } %></td>
-                    <td>
-                        <a href="courseStatus?courseId=<%=course.getId()%>">
-                         <span class="<% if (course.getStatus() != null && course.getStatus().equalsIgnoreCase("pending")) { %>badge text-bg-warning<% } else { %>badge text-bg-info<% } %>">
-                          <%= course.getStatus() != null ? course.getStatus() : "N/A" %>
-                        </span>
-                        </a>
-                    </td>
-                    <td>
-                        <a href="courseDelete?courseId=<%=course.getId()%>">
-                            <i class="fa-solid fa-trash"></i>
-                        </a>
-                    </td>
-                </tr>
-                <%
-                        }
-                    }
-                %>
+                <c:choose>
+                    <c:when test="${empty error}">
+                        <%
+                            List<Course> courses = (List<Course>) request.getAttribute("courses");
+                            int count = 1;
+                            if (courses != null) {
+                                for (Course course : courses) {
+                        %>
+                        <tr>
+                            <td><%=count++%></td>
+                            <td><%=String.format("CUR%03d",course.getId())%></td>
+                            <td><%= course.getName() %></td>
+                            <td><%= course.getDescription()%></td>
+                            <td>
+                                <%if(course.getInstructor() != null){ %>
+                                <%= course.getInstructor().getName()%>
+                                <% } %>
+                            </td>
+                            <td>
+                                <a href="courseStatus?courseId=<%=course.getId()%>">
+                    <span class="<% if (course.getStatus() != null && course.getStatus().equalsIgnoreCase("pending")) { %>badge text-bg-warning<% } else { %>badge text-bg-info<% } %>">
+                        <%= course.getStatus() != null ? course.getStatus() : "N/A" %>
+                    </span>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="courseDelete?courseId=<%=course.getId()%>">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        <%
+                                }
+                            }
+                        %>
+                    </c:when>
+                    <c:otherwise>
+                        <c:if test="${not empty error}">
+                            <tr>
+                                <td colspan="7">${error}</td>
+                            </tr>
+                        </c:if>
+
+                    </c:otherwise>
+                </c:choose>
+
                 </tbody>
             </table>
         </div>
