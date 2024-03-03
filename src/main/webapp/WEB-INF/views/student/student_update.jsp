@@ -23,6 +23,7 @@
                 <div class="col-md-5">
                     <input type="text" class="form-control"
                            value="STR00<%=student.getId()%>" id="studentID" disabled/>
+                    <input type="hidden" value="<%=student.getId()%>" name="hiddenId">
 
                 </div>
                 <input type="hidden" name="hide" value="<%=student.getId()%>"/>

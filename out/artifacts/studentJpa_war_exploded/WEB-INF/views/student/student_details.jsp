@@ -86,13 +86,15 @@
                                 <td><c:out value="${student.phone}" /></td>
                                 <td>
                                     <a href="updateStudent?studentId=${student.id}">
-                                        <button type="button" class="btn btn-success mb-3 me-3">
+                                        <button type="button" class="btn btn-success mb-3 me-3"
+                                                <%if(log_user.getRole().getName().equalsIgnoreCase("user")) {%> disabled <% }%>>
                                             <i class="fa-solid fa-pen-to-square"></i>
                                             Update</button>
                                     </a>
                                 </td>
                                 <td>
                                     <button type="button" class="btn btn-danger mb-3"
+                                            <% if(log_user.getRole().getName().equalsIgnoreCase("user")) {%> disabled <% }%>
                                             data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="setStudentId(${student.id})">
                                         <i class="fa-solid fa-trash"></i>
                                         Delete

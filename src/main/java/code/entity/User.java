@@ -32,6 +32,9 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private OTP otp;
 
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
+    private ResetPassword resetPassword;
+
     private boolean enabled;
     private boolean isNotLocked;
 }

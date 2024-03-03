@@ -68,6 +68,15 @@
                 </div>
                 <%}%>
 
+                <% if(log_user == null){ %>
+                <div class="row mb-4">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-6">
+                        <a href="/" class="btn btn-secondary col-md-2">Back</a>
+                    </div>
+                </div>
+                <%}%>
+
             </form:form>
         </div>
     </div>
@@ -89,7 +98,7 @@
             errorDialog.close();
         });
     }
-    function validateForm() {
+    /*function validateForm() {
         let name = document.getElementById('name').value;
         let email = document.getElementById('email').value;
         let password = document.getElementById('password').value;
@@ -101,6 +110,6 @@
         }
 
         return true;
-    }
+    }*/
 </script>
 <%@ include file="../layouts/footer.jsp" %>

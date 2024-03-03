@@ -1,6 +1,6 @@
 package code.controller;
 
-import code.dao.InstructorDao;
+import code.service.InstructorDao;
 import code.entity.Instructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

@@ -1,11 +1,10 @@
 package code.controller;
 
-import code.dao.CourseDao;
-import code.dao.InstructorDao;
+import code.service.CourseDao;
+import code.service.InstructorDao;
 import code.entity.Course;
 import code.entity.CourseForm;
 import code.entity.Instructor;
-import com.mysql.cj.PreparedQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,14 +35,22 @@ public class CourseController {
         return new ModelAndView("course/course_reg","courseForm",new CourseForm());
     }
     @PostMapping("/addCourse")
-    public String addCourse(@ModelAttribute("courseForm")CourseForm courseForm, HttpServletRequest request){
+    public String addCourse(@ModelAttribute("courseForm")CourseForm courseForm, HttpServletRequest request,Model model){
 
         Course course = courseForm.getCourse();
+        Instructor instructor = null;
         String instructor_name = courseForm.getInstructor();
-        Instructor instructor = instructorDao.findByName(instructor_name);
-        course.setInstructor(instructor);
-        courseDao.createCourse(course);
-        return "redirect:courseRegister";
+
+        if(instructor_name != null && !instructor_name.isEmpty()){
+            instructor = instructorDao.findByName(instructor_name);
+            if(instructor == null){
+                model.addAttribute("error","Instructor not found!");
+                return "course/course_reg";
+            }
+        }
+            course.setInstructor(instructor);
+            courseDao.createCourse(course);
+            return "redirect:/courseDetails";
     }
 
 
@@ -99,6 +106,37 @@ public class CourseController {
         Course updated_course = courseDao.changeStatus(courseId,course);
         model.addAttribute("status",updated_course.getStatus());
         redirectAttributes.addFlashAttribute("courseId", courseId);
+        return "redirect:/courseDetails";
+    }
+
+    @GetMapping("/courseUpdate")
+    public ModelAndView updateCourse(@RequestParam(name = "courseId",required = false)Long courseId){
+
+        Course course = courseDao.findById(courseId);
+        ModelAndView view = new ModelAndView("course/course_update");
+        view.addObject("course",new CourseForm());
+        view.addObject("update",course);
+        return view;
+
+    }
+    @PostMapping("/courseUpdate")
+    public String updating(@RequestParam(name = "hiddenId")Long courseId,@ModelAttribute("course")CourseForm courseForm,Model model){
+
+        Course courseResult = courseForm.getCourse();
+        Instructor instructor = null;
+        String instructor_name = courseForm.getInstructor();
+        courseResult.setId(courseId);
+        Course course = courseDao.findById(courseId);
+        courseResult.setStatus(course.getStatus());
+        if(instructor_name != null && !instructor_name.isEmpty()){
+            instructor = instructorDao.findByName(instructor_name);
+            if(instructor == null){
+                model.addAttribute("error","Instructor not found!");
+                return "course/course_reg";
+            }
+        }
+        courseResult.setInstructor(instructor);
+        courseDao.updateCourse(courseResult);
         return "redirect:/courseDetails";
     }
 }

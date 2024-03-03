@@ -33,7 +33,7 @@
             <form:input  type="text" path="email" placeholder="Please enter your email"/>
             <form:input type="password" path="password" placeholder="Please enter your Password"/>
             <div class="tito">
-                <a href="user_reg.jsp"> Forget Password </a>
+                <a href="/reset"> Forget Password </a>
                 <a href="userRegister"> Sign Up </a>
             </div>
             <button type="submit">login</button>

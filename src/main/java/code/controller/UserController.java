@@ -1,8 +1,8 @@
 package code.controller;
 
-import code.dao.UserDao;
-import code.entity.Student;
+import code.service.UserDao;
 import code.entity.User;
+import code.helper.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +15,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -44,11 +43,15 @@ public class UserController {
             return "user/user_reg";
         }
 
-        if(userDao.validEmail(user.getEmail()) > 0){
+        if(userDao.isEmailUsed(user.getEmail()) > 0){
             model.addAttribute("error","Email already used");
             return "user/user_reg";
         }
         String confirmPass = request.getParameter("confirmPass");
+        if(!Validator.isValidPassword(user.getPassword())){
+            model.addAttribute("error","Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit.");
+            return "user/user_reg";
+        }
         if(!user.getPassword().equals(confirmPass)){
             model.addAttribute("error","Password does not match");
             return "user/user_reg";

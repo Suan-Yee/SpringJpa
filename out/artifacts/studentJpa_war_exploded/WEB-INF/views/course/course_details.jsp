@@ -46,10 +46,11 @@
                     <th scope="col"> Name</th>
                     <th scope="col">Description</th>
                     <th scope="col">Instructor</th>
-                  <%--  <% if(!log_user.getRole().equalsIgnoreCase("user")){ %>--%>
+                    <% if(!log_user.getRole().getName().equalsIgnoreCase("user")){ %>
                     <th scope="col">Status</th>
+                    <th scope="col">Update</th>
                     <th scope="col">Delete</th>
-                   <%-- <% } %>--%>
+                    <% } %>
                 </tr>
                 </thead>
 
@@ -72,6 +73,7 @@
                                 <%= course.getInstructor().getName()%>
                                 <% } %>
                             </td>
+                            <% if(!log_user.getRole().getName().equalsIgnoreCase("user")){ %>
                             <td>
                                 <a href="courseStatus?courseId=<%=course.getId()%>">
                     <span class="<% if (course.getStatus() != null && course.getStatus().equalsIgnoreCase("pending")) { %>badge text-bg-warning<% } else { %>badge text-bg-info<% } %>">
@@ -79,11 +81,31 @@
                     </span>
                                 </a>
                             </td>
+                            <% } %>
+
+
+                            <% if(!log_user.getRole().getName().equalsIgnoreCase("user")){ %>
+                            <td>
+                                <a href="courseUpdate?courseId=<%=course.getId()%>">
+                                    <i class="fa-solid fa-wrench"></i>
+                                </a>
+                            </td>
+                            <% } %>
+
+
+
+
+
+
+
+                            <% if(!log_user.getRole().getName().equalsIgnoreCase("user")){ %>
                             <td>
                                 <a href="courseDelete?courseId=<%=course.getId()%>">
                                     <i class="fa-solid fa-trash"></i>
                                 </a>
                             </td>
+                            <% } %>
+
                         </tr>
                         <%
                                 }

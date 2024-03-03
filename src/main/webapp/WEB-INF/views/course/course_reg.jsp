@@ -1,4 +1,5 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="../layouts/header.jsp" %>
 <div class="container">
     <%@include file="../layouts/sidenav.jsp" %>
@@ -8,31 +9,37 @@
     }%>
     <div class="main_contents">
         <div id="sub_content">
-            <form:form method="post" modelAttribute="courseForm" action="addCourse" id="courseForm" >
+            <form:form method="post" modelAttribute="courseForm" action="addCourse" id="form-ad" >
 
                 <h2 class="col-md-6 offset-md-2 mb-5 mt-4">Course Registration</h2>
 
                 <div class="row mb-4">
                     <div class="col-md-2"></div>
                     <form:label for="name" path="course.name" class="col-md-2 col-form-label">Name</form:label>
-                    <div class="col-md-4">
+                    <div class="col-md-4 input-control">
                         <form:input type="text" class="form-control" path="course.name" id="name" placeholder="Enter Course Name"></form:input>
+                        <div class="error"></div>
                     </div>
                 </div>
 
                 <div class="row mb-4">
                     <div class="col-md-2"></div>
                     <form:label for="description" path="course.description" class="col-md-2 col-form-label">Description</form:label>
-                    <div class="col-md-4">
+                    <div class="col-md-4 input-control">
                         <form:textarea type="text" class="form-control" path="course.description" id="description" placeholder="Description"></form:textarea>
+                        <div class="error"></div>
                     </div>
                 </div>
 
                 <div class="row mb-4">
                     <div class="col-md-2"></div>
                     <form:label for="instructor" path="instructor"  class="col-md-2 col-form-label">Instructor</form:label>
-                    <div class="col-md-4">
+                    <div class="col-md-4 input-control">
                         <form:input type="text" class="form-control" path="instructor" id="instructor" placeholder="Instructor"></form:input>
+                        <c:if test="${not empty error}">
+                            <div class="error alert alert-danger"> ${error}</div>
+                        </c:if>
+
                     </div>
                 </div>
 
@@ -43,36 +50,61 @@
                 </div>
 
             </form:form>
-
-            <%--<div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Course Registration</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <h5 style="color: rgb(127, 209, 131);">Registered Successfully!</h5>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-success col-md-2" data-bs-dismiss="modal" id="okButton">Ok</button>
-                        </div>
-                    </div>
-                </div>
-            </div>--%>
         </div>
     </div>
 </div>
 
-<%--<script>
-    document.getElementById('openModalButton').addEventListener('click', function () {
-        document.getElementById('exampleModal').classList.add('show');
-        document.getElementById('exampleModal').style.display = 'block';
-    });
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('form-ad');
+        const name = document.getElementById('name');
+        const description = document.getElementById('description');
+        const instructor = document.getElementById('instructor');
 
-    document.getElementById('okButton').addEventListener('click', function () {
-        document.getElementById('courseForm').submit();
-    });
-</script>--%>
+        form.addEventListener('submit', function(event){
+            if(!validateInputs()){
+                event.preventDefault();
+            }
+        });
 
+        const setError = function (element, message) {
+            const inputControl = element.parentElement;
+            const errorDisplay = inputControl.querySelector('.error');
+
+            errorDisplay.innerText = message;
+            inputControl.classList.add('error');
+            errorDisplay.classList.add('alert', 'alert-danger');
+            errorDisplay.classList.add('show');
+        };
+
+        const setSuccess = function (element) {
+            const inputControl = element.parentElement;
+            const errorDisplay = inputControl.querySelector('.error');
+
+            errorDisplay.innerText = '';
+            inputControl.classList.remove('error');
+            errorDisplay.classList.remove('alert', 'alert-danger');
+            errorDisplay.classList.remove('show');
+        };
+
+        const validateInputs = function () {
+            const nameValue = name.value.trim();
+            const descriptionValue = description.value.trim();
+
+            if (nameValue === '') {
+                setError(name, 'CourseName is required');
+            } else {
+                setSuccess(name);
+            }
+
+            if (descriptionValue === ''){
+                setError(description,'Description is required');
+            }else{
+                setSuccess(description);
+            }
+
+            return !document.querySelectorAll('.error.show').length;
+        };
+    });
+</script>
 <%@include file="../layouts/footer.jsp" %>

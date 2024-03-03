@@ -1,8 +1,8 @@
 package code.controller;
 
-import code.dao.CourseDao;
-import code.dao.EnrollDao;
-import code.dao.StudentDao;
+import code.service.CourseDao;
+import code.service.EnrollDao;
+import code.service.StudentDao;
 import code.entity.Course;
 import code.entity.RegisterForm;
 import code.entity.Student;
@@ -86,13 +86,15 @@ public class StudentController {
         return modelAndView;
     }
     @PostMapping("/updateStudentAction")
-    public String updateStudentAction(@ModelAttribute("register")RegisterForm reg, Model model, HttpServletRequest request){
+    public String updateStudentAction(@ModelAttribute("register")RegisterForm reg,@RequestParam("hiddenId") Long studentId ,Model model, HttpServletRequest request){
 
         String gender = request.getParameter("gender");
         String education = request.getParameter("education");
         String[] select_course = request.getParameterValues("course");
 
+
         String image = saveImage(reg,request);
+        deleteImage(studentId,request);
         String str_id  = request.getParameter("hide");
         Long id = 0L;
         if (str_id != null && !str_id.isEmpty()) {
@@ -181,21 +183,41 @@ public class StudentController {
 
     private String saveImage(RegisterForm rgf, HttpServletRequest request) {
         MultipartFile file = rgf.getStudent().getFile();
+        String originalFileName = file.getOriginalFilename();
+
+        String uniqueFileName = System.currentTimeMillis() + "_" + originalFileName;
+
         String rootDirectory = request.getSession().getServletContext().getRealPath("/");
-        Path path = Paths.get(rootDirectory + "WEB-INF/images/" + rgf.getStudent().getName() + ".png");
+        Path path = Paths.get(rootDirectory + "WEB-INF/images/" + uniqueFileName);
 
         if (file != null && !file.isEmpty()) {
             try {
                 file.transferTo(new File(path.toString()));
             } catch (IOException e) {
                 e.printStackTrace();
-                throw new RuntimeException("File cannot be upload");
+                throw new RuntimeException("File cannot be uploaded");
             }
         }
-        String imageName = rgf.getStudent().getName() + ".png";
-        return imageName;
+        return uniqueFileName;
     }
+    public boolean deleteImage(Long studentId, HttpServletRequest request) {
+        try {
+            Student student = studentDao.findById(studentId);
+            String rootDirectory = request.getSession().getServletContext().getRealPath("/");
 
+            if (student != null) {
+                String previousFileName = student.getImageUrl();
+                if (previousFileName != null && !previousFileName.isEmpty()) {
+                    Path previousPath = Paths.get(rootDirectory + "WEB-INF/images/" + previousFileName);
+                    Files.deleteIfExists(previousPath);
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     private List<Student> saveStudent(RegisterForm rg,String image){
 

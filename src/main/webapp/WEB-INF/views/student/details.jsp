@@ -25,7 +25,7 @@
                     <img src="/images/${student.imageUrl}" alt="Profile Image" class="img-radius profile-image" alt="User-Profile-Image">
                   </c:when>
                   <c:otherwise>
-                    <img src="/images/Akon.png" alt="Profile Image" class="img-radius profile-image" alt="User-Profile-Image">
+                    <img src="/images/cute.jpg" alt="Profile Image" class="img-radius profile-image" alt="User-Profile-Image">
                   </c:otherwise>
                 </c:choose>
               </div>
@@ -33,8 +33,10 @@
               <h6 class="f-w-600">${student.name}</h6>
               <p>${student.education}</p>
               <a href="updateStudent?studentId=${student.id}">
-                <i class=" mdi mdi-square-edit-outline feather icon-edit m-t-10 f-16  fa-solid fa-pen-to-square"></i>
-              </a>
+              <button <%if(log_user.getRole().getName().equalsIgnoreCase("user")) {%> disabled <% }%> %>
+                <i class="mdi mdi-square-edit-outline feather icon-edit m-t-10 f-16 fa-solid fa-pen-to-square"></i>
+              </button>
+            </a>
             </div>
 
           </div>

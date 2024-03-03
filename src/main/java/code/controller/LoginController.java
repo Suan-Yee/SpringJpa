@@ -1,10 +1,11 @@
 package code.controller;
 
-import code.dao.EmailService;
-import code.dao.OTPService;
-import code.dao.UserDao;
+import code.service.EmailService;
+import code.service.OTPService;
+import code.service.UserDao;
 import code.entity.OTP;
 import code.entity.User;
+import code.helper.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -140,13 +141,20 @@ public class LoginController {
         HttpSession session = request.getSession(false);
         User log_user = (User)session.getAttribute("valid_user");
         user.setId(log_user.getId());
-        if(userDao.validEmail(user.getEmail()) < 0){
-            userDao.changeEmail(user,request);
-        }else{
+        if(userDao.isEmailUsed(user.getEmail()) > 0){
             model.addAttribute("error","Email already used");
             return "user/change";
         }
-
+        if(!Validator.isValidPassword(user.getPassword())){
+            model.addAttribute("error","Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit.");
+            return "user/change";
+        }
+        String confirmPass = request.getParameter("confirmPass");
+        if(!user.getPassword().equals(confirmPass)){
+            model.addAttribute("error","Password does not match");
+            return "user/user_reg";
+        }
+        userDao.changeEmail(user,request);
         if (session != null) {
             session.invalidate();
         }

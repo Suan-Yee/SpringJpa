@@ -11,6 +11,7 @@
                 <form:form action="changeEmailAndPassword" modelAttribute="user" class="login-form" method="post">
                     <form:input  type="text" path="email" placeholder="Please enter your new email"/>
                     <form:input type="password" path="password" placeholder="Please enter your new Password"/>
+                    <input name="confirmPass" type="hidden" placeholder="Confirm Password"/>
 
                     <button type="submit">Change</button>
 
